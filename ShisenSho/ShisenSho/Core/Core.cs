@@ -18,6 +18,11 @@ namespace ShisenSho
 		{
 			return 12;
 		}
+
+		public int getBrickID (int x, int y)
+		{
+			return 1;
+		}
 	}
 }
 
