@@ -7,11 +7,13 @@ namespace ShisenSho
 	{
 		private int s;
 		private Core c;
+		private bool crossed;
 
 		public TableWidget (Core core, int scale) : base ((uint)core.getBoardHeight () + 2, (uint)core.getBoardWidth () + 2, true) // +2 is added at both values because we need empty boxes in the outline
 		{
 			this.c = core;
 			this.s = scale;
+			crossed = false;
 		}
 
 		private void attachBrick (Widget w, int x, int y)
@@ -44,6 +46,15 @@ namespace ShisenSho
 		private void onClick (object obj, ButtonPressEventArgs args)
 		{
 			BrickWidget brick = (BrickWidget)obj;
+
+			if (crossed)
+			{
+				
+			}
+			else
+			{
+				
+			}
 		}
 	}
 }

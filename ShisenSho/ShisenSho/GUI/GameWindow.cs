@@ -14,7 +14,7 @@ namespace ShisenSho
 		{
 			Build ();
 
-			c = new Core ();
+			c = new Core (6,12);
 
 			// Workaround needed to not exceed window dimension on HD screen or lesser
 			int scale = (Screen.Height < 1000) ? 5 : 10;
@@ -60,6 +60,11 @@ namespace ShisenSho
 		{
 			Application.Quit ();
 			a.RetVal = true;
+		}
+
+		public bool clickHandler (int startX, int startY, int endX, int endY)
+		{
+			return false;
 		}
 	}
 }
