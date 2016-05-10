@@ -19,9 +19,9 @@ namespace ShisenSho
 			Image img = renderSvg (id, scale);
 			Fixed f = new Fixed ();
 			f.Add (img);
-			f.ShowAll ();
+			//f.ShowAll ();
 			this.Add (f);
-			this.Show ();
+			//this.Show ();
 		}
 
 		// This function will produce an image of the desired scale from the svg file
