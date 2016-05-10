@@ -14,7 +14,7 @@ namespace ShisenSho
 		{
 			Build ();
 
-			c = new Core (6,12);
+			c = new Core (6,12,12);
 
 			// Workaround needed to not exceed window dimension on HD screen or lesser
 			int scale = (Screen.Height < 1000) ? 5 : 10;

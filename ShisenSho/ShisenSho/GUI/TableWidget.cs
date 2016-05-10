@@ -36,8 +36,10 @@ namespace ShisenSho
 			// Starting from one because of the outline
 			for (int x = 1; x <= c.getBoardWidth (); x++) {
 				for (int y = 1; y <= c.getBoardHeight (); y++) {
-					BrickWidget brick = new BrickWidget (s, this.c.getBrickID (x, y));
-					this.attachBrick (brick, x, y);
+					int brickID = this.c.getBrickID (x, y);
+					if (brickID != 0)
+						this.attachBrick (new BrickWidget (s, this.c.getBrickID (x, y)),
+										  x, y);
 				}
 			}
 			this.ShowAll ();
