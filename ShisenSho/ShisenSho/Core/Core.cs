@@ -24,7 +24,7 @@ namespace ShisenSho
 		// Testing function, the final implementation will be different
 		private void generate_board ()
 		{
-			// Generating tiles for the board
+			// Generating bricks for the board
 			for (int i = 1; i <= this.width; i++)
 				for (int j = 1; j <= this.height; j++)
 					this.board [i,j] = (this.rnd.Next() % (brickNumber - 1)) + 1;

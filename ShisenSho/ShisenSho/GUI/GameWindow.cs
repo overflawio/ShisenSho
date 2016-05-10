@@ -61,11 +61,6 @@ namespace ShisenSho
 			Application.Quit ();
 			a.RetVal = true;
 		}
-
-		public bool clickHandler (int startX, int startY, int endX, int endY)
-		{
-			return false;
-		}
 	}
 }
 
