@@ -18,11 +18,11 @@ namespace ShisenSho
 			this.brickNumber = brickNumber;
 			board = new int[this.width + 2,this.height + 2];
 			this.rnd = new Random ();
-			populate_board ();
+			generate_board ();
 		}
 
 		// Testing function, the final implementation will be different
-		private void populate_board ()
+		private void generate_board ()
 		{
 			// Generating tiles for the board
 			for (int i = 1; i <= this.width; i++)
