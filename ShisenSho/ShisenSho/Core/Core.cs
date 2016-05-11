@@ -44,6 +44,15 @@ namespace ShisenSho
 		{
 			return this.board [x,y];
 		}
+
+		public bool makeMove (int x1, int y1, int x2, int y2)
+		{
+			bool res = false;
+			if (board [x1, y1] == board [x2, y2]) {
+				board [x1, y1] = board [x2, y2] = 0;
+				res = true;
+			}
+			return res;
+		}
 	}
 }
-
