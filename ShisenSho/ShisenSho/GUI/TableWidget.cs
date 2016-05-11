@@ -60,6 +60,35 @@ namespace ShisenSho
 
 			if( ((Gdk.EventButton)args.Event).Type == Gdk.EventType.ButtonPress)
 			{
+				if (!crossed) {
+					crossed = true;
+					selected = brick;
+					Fixed f = (Fixed)(brick.Child);
+					Image cross = brick.checkBrick ();
+					f.Add (cross);
+					f.ShowAll ();
+				} else {
+					Fixed f = (Fixed)(selected.Child);
+					if (f.Children.Length > 1)
+						f.Remove (f.Children [1]);
+					
+					if (selected == brick) {
+						crossed = false;
+					} else {
+						if (!c.makeMove (selected.getX (), selected.getY (),
+							    brick.getX (), brick.getY ())) {
+							selected = brick;
+							f = (Fixed)(brick.Child);
+							Image cross = brick.checkBrick ();
+							f.Add (cross);
+							f.ShowAll ();
+						} else {
+							selected = null;
+							crossed = false;
+							update ();
+						}
+					}
+				}
 			}
 		}
 
