@@ -42,7 +42,7 @@ namespace ShisenSho
 		{
 			global::Stetic.Gui.Initialize (this);
 			// Widget MainWindow
-			this.Name = "MainWindow";
+			this.Name = "GameWindow";
 			this.Title = global::Mono.Unix.Catalog.GetString ("ShisenSho");
 
 			// 3 is the value needed to show the window at the center of the screen

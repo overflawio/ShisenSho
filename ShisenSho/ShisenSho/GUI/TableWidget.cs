@@ -57,28 +57,16 @@ namespace ShisenSho
 		private void onClick (object obj, ButtonPressEventArgs args)
 		{
 			BrickWidget brick = (BrickWidget)obj;
-			if (crossed)
+
+			if( ((Gdk.EventButton)args.Event).Type == Gdk.EventType.ButtonPress)
 			{
-				if (selected == brick) {
-					Console.WriteLine ("deselezionato");
-					crossed = false;
-					Fixed f = (Fixed)(brick.Child);
-					if (f.Children.Length > 1)
-						f.Remove (f.Children [1]);
-				} else {
-					// Call core and check if the move is possible
-				}
-			}
-			else
-			{
-				crossed = true;
-				selected = brick;
-				Fixed f = (Fixed)(brick.Child);
-				Image circle = brick.checkBrick ();
-				f.Add (circle);
-				f.ShowAll ();
 			}
 		}
+
+		/*
+		private void processTile (BrickWidget b)
+		{
+		}*/
 	}
 }
 
