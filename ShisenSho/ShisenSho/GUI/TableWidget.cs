@@ -37,12 +37,7 @@ namespace ShisenSho
 			// Starting from one because of the outline
 			for (int x = 1; x < c.getBoardWidth () + 2; x++) {
 				for (int y = 1; y < c.getBoardHeight () + 2; y++) {
-					int brickID;
-					if (x == 0 || y == 0 || x == c.getBoardWidth () + 1 || y == c.getBoardHeight () + 1)
-						brickID = 0;
-					else
-						brickID = this.c.getBrickID (x, y);
-					if (brickID != 0)
+					if (this.c.getBrickID (x, y) != 0)
 					{
 						BrickWidget b = new BrickWidget (x, y, s, this.c.getBrickID (x, y));
 
@@ -91,11 +86,6 @@ namespace ShisenSho
 				}
 			}
 		}
-
-		/*
-		private void processTile (BrickWidget b)
-		{
-		}*/
 	}
 }
 
