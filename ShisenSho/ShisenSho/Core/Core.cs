@@ -24,13 +24,31 @@ namespace ShisenSho
 			generate_board ();
 		}
 
-		// Testing function, the final implementation will be different
+		// Generating bricks for the board
 		private void generate_board ()
 		{
-			// Generating bricks for the board
-			for (int i = 1; i <= this.width; i++)
-				for (int j = 1; j <= this.height; j++)
-					this.board [i,j] = (this.rnd.Next() % (brickNumber - 1)) + 1;
+			int i, j, k;
+			int[] numTile = new int[brickNumber];	// Each entry is for a different tile
+
+			// Initializing the array
+			for (i = 0; i < brickNumber; i++)
+				numTile [i] = (this.width * this.height) / brickNumber;	// Number of instances of the same tile
+
+			// Placing tiles
+			for (i = 1; i <= this.height; i++)	// Rows
+				for (j = 1; j <= this.width; j++) {	// Column
+					do 
+					{
+						k = (rnd.Next () % (brickNumber - 1));
+						if (k != (brickNumber - 1) && numTile [k] == 0 && numTile [k + 1] != 0)
+							k++;
+						else if (k != 0 && numTile [k] == 0 && numTile [k - 1] != 0)
+							k--;
+					}
+					while (numTile [k] == 0);
+					board [j, i] = k + 1;
+					numTile [k]--;
+				}
 		}
 
 		public int getBoardHeight ()
