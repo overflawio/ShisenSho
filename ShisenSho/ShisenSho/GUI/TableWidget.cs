@@ -31,7 +31,7 @@ namespace ShisenSho
 			//add all children
 			populateBoard ();
 			if (c.getBrickCount () == 0)
-				Console.WriteLine ("Game Over, need to implement a popup");
+				Console.WriteLine ("You won, need to implement a popup");
 			else
 				Console.WriteLine (c.getBrickCount ());
 		}
