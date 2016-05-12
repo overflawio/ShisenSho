@@ -9,6 +9,7 @@ namespace ShisenSho
 		private int width;
 		private int brickNumber;	// Number of different type of bricks
 		private int [,] board;
+		private int brickCount;	// Number of bricks whit value != 0
 		private Random rnd;
 
 		public Core (int height, int width, int brickNumber)
@@ -16,6 +17,7 @@ namespace ShisenSho
 			this.height = height;
 			this.width = width;
 			this.brickNumber = brickNumber;
+			this.brickCount = height * width;
 			board = new int[this.width + 2,this.height + 2];
 			this.rnd = new Random ();
 			generate_board ();
@@ -45,12 +47,18 @@ namespace ShisenSho
 			return this.board [x,y];
 		}
 
+		public int getBrickCount ()
+		{
+			return brickCount;
+		}
+
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
 			bool res = false;
 			if (board [x1, y1] == board [x2, y2]) {
 				board [x1, y1] = board [x2, y2] = 0;
 				res = true;
+				brickCount -= 2;
 			}
 			return res;
 		}
