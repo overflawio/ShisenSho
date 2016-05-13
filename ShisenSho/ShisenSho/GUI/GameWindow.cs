@@ -10,11 +10,11 @@ namespace ShisenSho
 		VBox vContainer;			// Vertical container box
 		HBox hContainer;			// Horizontal container box
 
-		public GameWindow () : base (Gtk.WindowType.Toplevel)
+		public GameWindow (Core c) : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
 
-			c = new Core (6,12,12);
+			this.c = c;
 
 			// Workaround needed to not exceed window dimension on HD screen or lesser
 			int scale = (Screen.Height < 1000) ? 4 : 8;
