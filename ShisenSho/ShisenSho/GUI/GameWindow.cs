@@ -17,7 +17,7 @@ namespace ShisenSho
 			this.c = c;
 
 			// Workaround needed to not exceed window dimension on HD screen or lesser
-			int scale = (Screen.Height < 1000) ? 4 : 8;
+			int scale = (Screen.Height < 1000) ? 4 : 5;
 
 			this.table = new TableWidget (c, scale);
 			this.vContainer = new VBox ();
@@ -63,4 +63,3 @@ namespace ShisenSho
 		}
 	}
 }
-
