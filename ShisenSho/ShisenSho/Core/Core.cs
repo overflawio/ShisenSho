@@ -76,11 +76,10 @@ namespace ShisenSho
 
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
-			bool res = false;
-			if (board [x1, y1] == board [x2, y2]) {
-				// res = pathViability (x1,y1,x2,y2,Direction.none,0); // recursive call that checks if there is a path from a brick to another one
+			bool res = pathViability (x1,y1,x2,y2,Direction.none,0); // recursive call that checks if there is a path from a brick to another one
+			if (res)
+			{
 				board [x1, y1] = board [x2, y2] = NO_TILE_TYPE;
-				res = true;
 				brickCount -= 2;
 			}
 			return res;
@@ -111,13 +110,20 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
 		{
+
+			if (board [x1, y1] == board [x2, y2]) {
+
+				return true;
+			}
+			return false;
+			/*
 			int direction; // The board is "divided" by the brick in 4 parts labeled whit (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
 			switch (d)
 			{
-			case Direction.none:/*
+			case Direction.none:
 				if (this.board [x1][y1 - 1] == 0)
 					return less_than_3_turn_path (x1, y1 - 1, x2, y2, Direction.up, turn_count + 1);
-				else if (turn_count < 3)*/
+				else if (turn_count < 3)
 					
 				break;
 			case Direction.up:
@@ -148,7 +154,7 @@ namespace ShisenSho
 			default:
 				// [Error Check] need to implement to prevent bad arguments
 				break;
-			}
+			}*/
 		}
 	}
 }
