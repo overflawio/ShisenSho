@@ -33,7 +33,12 @@ namespace ShisenSho
 			if (c.getBrickCount () == 0)
 				Console.WriteLine ("You won, need to implement a popup");
 			else
-				Console.WriteLine (c.getBrickCount ());
+			{
+				if (c.getBrickCount () == 4)
+					Console.WriteLine ("Need to check if there are other perfermable moves");
+				else
+					Console.WriteLine (c.getBrickCount ());
+			}
 		}
 
 		private void populateBoard ()
