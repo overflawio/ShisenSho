@@ -5,6 +5,8 @@ namespace ShisenSho
 {
 	public class Core
 	{
+		// Defining enum direction
+		enum Direction {none, up, down, left, right};
 		public const int NO_BRICK_TYPE = 0;
 		private int height;
 		private int width;
@@ -73,10 +75,10 @@ namespace ShisenSho
 
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
-			bool res = false;
-			if (board [x1, y1] == board [x2, y2]) {
+			bool res = pathViability (x1,y1,x2,y2,Direction.none,0); // recursive call that checks if there is a path from a brick to another one
+			if (res)
+			{
 				board [x1, y1] = board [x2, y2] = NO_BRICK_TYPE;
-				res = true;
 				brickCount -= 2;
 			}
 			return res;
@@ -101,6 +103,57 @@ namespace ShisenSho
 						this.board [i,j] = temp_type;
 						temp_type = NO_BRICK_TYPE;
 					}
+		}
+
+		
+
+		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
+		{
+
+			if (board [x1, y1] == board [x2, y2]) {
+
+				return true;
+			}
+			return false;
+			/*
+			int direction; // The board is "divided" by the brick in 4 parts labeled whit (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
+			switch (d)
+			{
+			case Direction.none:
+				if (this.board [x1][y1 - 1] == 0)
+					return less_than_3_turn_path (x1, y1 - 1, x2, y2, Direction.up, turn_count + 1);
+				else if (turn_count < 3)
+					
+				break;
+			case Direction.up:
+				if (y1 > y2 && this.board [x1,y1 - 1] == 0)
+					return pathViability (x1, y1 - 1, x2, y2, Direction.up, turn_count);
+				else
+				{
+					if (turn_count == 3)
+						return false;
+					if (x1 > x2 && this.board [x1 - 1,y1] == 0)
+						return pathViability (x1 - 1, y1, x2, y2, Direction.left, turn_count + 1);
+					else if (x1 < x2 && this.board [x1 + 1,y1] == 0)
+						return pathViability (x1 + 1, y1, x2, y2, Direction.right, turn_count + 1);
+				}
+				break;
+			case Direction.down:
+				if (y1 < y2 && this.board [x1,y1 + 1] == 0)
+					return pathViability (x1, y1 + 1, x2, y2, Direction.down, turn_count);
+				break;
+			case Direction.left:
+				if (x1 > x2 && this.board [x1 - 1,y1] == 0)
+					return pathViability (x1 - 1, y1, x2, y2, Direction.left, turn_count);
+				break;
+			case Direction.right:
+				if (x1 < x2 && this.board [x1 + 1,y1] == 0)
+					return pathViability (x1 + 1, y1, x2, y2, Direction.left, turn_count);
+				break;
+			default:
+				// [Error Check] need to implement to prevent bad arguments
+				break;
+			}*/
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace ShisenSho
 			// Starting from one because of the outline
 			for (int x = 1; x < c.getBoardWidth () + 2; x++) {
 				for (int y = 1; y < c.getBoardHeight () + 2; y++) {
-					if (this.c.getBrickID (x, y) != Core.NO_TILE_TYPE)
+					if (this.c.getBrickID (x, y) != Core.NO_BRICK_TYPE)
 					{
 						BrickWidget b = new BrickWidget (x, y, s, this.c.getBrickID (x, y));
 
