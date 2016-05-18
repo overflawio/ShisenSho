@@ -78,6 +78,7 @@ namespace ShisenSho
 		{
 			bool res = false;
 			if (board [x1, y1] == board [x2, y2]) {
+				// res = pathViability (x1,y1,x2,y2,Direction.none,0); // recursive call that checks if there is a path from a brick to another one
 				board [x1, y1] = board [x2, y2] = NO_TILE_TYPE;
 				res = true;
 				brickCount -= 2;
@@ -110,45 +111,39 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
 		{
-			int direction; // The board is "divided" by the tile in 4 parts labeled whit (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
+			int direction; // The board is "divided" by the brick in 4 parts labeled whit (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
 			switch (d)
 			{
 			case Direction.none:/*
 				if (this.board [x1][y1 - 1] == 0)
 					return less_than_3_turn_path (x1, y1 - 1, x2, y2, Direction.up, turn_count + 1);
 				else if (turn_count < 3)*/
-
-				if (x1 < x2) {
-					if (y1 < y2)
-
-					else if (y1 > y2)
-				}
 					
 				break;
 			case Direction.up:
-				if (y1 > y2 && this.board [x1][y1 - 1] == 0)
-					return less_than_3_turn_path (x1, y1 - 1, x2, y2, Direction.up, turn_count);
+				if (y1 > y2 && this.board [x1,y1 - 1] == 0)
+					return pathViability (x1, y1 - 1, x2, y2, Direction.up, turn_count);
 				else
 				{
 					if (turn_count == 3)
 						return false;
-					if (x1 > x2 && this.board [x1 - 1][y1] == 0)
-					return less_than_3_turn_path (x1 - 1, y1, x2, y2, Direction.left, turn_count + 1);
-					else if (x1 < x2 && this.board [x1 + 1][y1] == 0)
-					return less_than_3_turn_path (x1 + 1, y1, x2, y2, Direction.right, turn_count + 1);
+					if (x1 > x2 && this.board [x1 - 1,y1] == 0)
+						return pathViability (x1 - 1, y1, x2, y2, Direction.left, turn_count + 1);
+					else if (x1 < x2 && this.board [x1 + 1,y1] == 0)
+						return pathViability (x1 + 1, y1, x2, y2, Direction.right, turn_count + 1);
 				}
 				break;
 			case Direction.down:
-				if (y1 < y2 && this.board [x1][y1 + 1] == 0)
-					return less_than_3_turn_path (x1, y1 + 1, x2, y2, Direction.down, turn_count);
+				if (y1 < y2 && this.board [x1,y1 + 1] == 0)
+					return pathViability (x1, y1 + 1, x2, y2, Direction.down, turn_count);
 				break;
 			case Direction.left:
-				if (x1 > x2 && this.board [x1 - 1][y1] == 0)
-					return less_than_3_turn_path (x1 - 1, y1, x2, y2, Direction.left, turn_count);
+				if (x1 > x2 && this.board [x1 - 1,y1] == 0)
+					return pathViability (x1 - 1, y1, x2, y2, Direction.left, turn_count);
 				break;
 			case Direction.right:
-				if (x1 < x2 && this.board [x1 + 1][y1] == 0)
-					return less_than_3_turn_path (x1 + 1, y1, x2, y2, Direction.left, turn_count);
+				if (x1 < x2 && this.board [x1 + 1,y1] == 0)
+					return pathViability (x1 + 1, y1, x2, y2, Direction.left, turn_count);
 				break;
 			default:
 				// [Error Check] need to implement to prevent bad arguments
