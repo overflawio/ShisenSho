@@ -116,7 +116,17 @@ namespace ShisenSho
 				return true;
 			}
 			return false;
-			/*
+
+			if (d == Direction.none)
+			{
+				Console.WriteLine ("Searching the next direction to explore");
+				Console.WriteLine ("Recursion whit new direction");
+			}
+			else
+			{
+				// go DodoIta!
+			}
+				/*
 			int direction; // The board is "divided" by the brick in 4 parts labeled whit (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
 			switch (d)
 			{
