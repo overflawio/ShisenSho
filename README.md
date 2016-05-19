@@ -6,4 +6,11 @@
 <li>Detect gameover/win</li>
 </ul>
 
+Collaborators:
+- <a 
+href="https://github.com/MascioSpam">Flavio Mascetti</a>
+
+- <a href="https://github.com/DodoIta">Davide 
+Cortellucci</a>
+
 Brick svgs downloaded from <a href="https://commons.wikimedia.org/wiki/User:Shizhao/Mahjong">Wikimedia Commons</a>
