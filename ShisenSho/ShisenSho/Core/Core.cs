@@ -108,6 +108,8 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
 		{
+			int i;
+			bool viable = false;
 
 			if (board [x1, y1] == board [x2, y2]) {
 
@@ -122,157 +124,12 @@ namespace ShisenSho
 			}
 			else
 			{
-				// go DodoIta!
+				/*
+				switch (d)
+				{
+				}
+				*/
 			}
-
-			/*
-			int direction; // The board is "divided" by the brick in 4 parts labeled whit (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
-			int direction; // The board is "divided" by the brick in 4 parts labeled whit 
-						   // (Nord-ovest, Nord-est, Sud-est, Sud-ovest).
-			int i;
-			bool viable = false;
-			switch (d)
-			{
-			case Direction.none:
-				// WIP					
-				break;
-			case Direction.up:
-				// First check if the second tile is in the same column of the first one
-				if (y1 == y2) {
-					// Check if the second tile is next to the first one
-					if (x2 == x1 - 1)
-						return true;
-					else
-						for (i = x1 - 1; (board [i, y1] == 0 && i > 0); i--)
-							if (board [i, y1] == board[x1, y1])	// To be handled within the GUI
-								return true;
-				} 
-				else {	// Otherwise try every path recursively
-					i = x1 - 1;
-					do {
-						if (i >= 0) {	// Try up until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.up, turn_count);
-							if (viable == true)
-								return viable;
-						}
-						else if (y1 <= this.width + 1) {	// Try right until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.right, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-						else if (y1 >= 0) {	// Try left until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.left, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-					}
-					while (viable == false && turn_count < 2);
-				}
-				break;
-			case Direction.down:
-				// First check if the second tile is in the same column of the first one
-				if (y1 == y2) {
-					// Check if the second tile is next to the first one
-					if (x2 == x1 + 1)
-						return true;
-					else
-						for (i = x1 + 1; (board [i, y1] == 0 || i < this.height + 1); i++)
-							if (board [i, y1] == board[x1, y1])	// To be handled within the GUI
-								return true;
-				} 
-				else {	// Otherwise try every path recursively
-					i = x1 + 1;
-					do {
-						if (i <= this.height + 1) {	// Try down until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.down, turn_count);
-							if (viable == true)
-								return viable;
-						}
-						else if (y1 <= this.width + 1) {	// Try right until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.right, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-						else if (y1 >= 0) {	// Try left until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.left, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-					}
-					while (viable == false && turn_count < 2);
-				}
-				break;
-			case Direction.left:
-				// First check if the second tile is in the same row of the first one
-				if (x1 == x2) {
-					// Check if the second tile is next to the first one
-					if (y2 == y1 - 1)
-						return true;
-					else
-						for (i = y1 - 1; (board [x1, i] == 0 || i > 0); i--)
-							if (board [x1, i] == board[x1, y1])	// To be handled within the GUI
-								return true;
-				} 
-				else {	// Otherwise try every path recursively
-					i = y1 - 1;
-					do {
-						if (i >= 0) {	// Try left until the edge of the board
-							viable = pathViability (x1, i, x2, y2, Direction.left, turn_count);
-							if (viable == true)
-								return viable;
-						}
-						else if (x1 >= 0) {	// Try up until the edge of the board
-							viable = pathViability (x1, i, x2, y2, Direction.up, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-						else if (x1 <= this.height + 1) {	// Try down until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.down, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-					}
-					while (viable == false && turn_count < 2);
-				}
-				break;
-			case Direction.right:
-				// First check if the second tile is in the same row of the first one
-				if (x1 == x2) {
-					// Check if the second tile is next to the first one
-					if (y2 == y1 + 1)
-						return true;
-					else
-						for (i = y1 + 1; (board [x1, i] == 0 || i < this.width + 1); i++)
-							if (board [x1, i] == board[x1, y1])	// To be handled within the GUI
-								return true;
-				} 
-				else {	// Otherwise try every path recursively
-					i = y1 + 1;
-					do {
-						if (i <= this.width + 1) {	// Try right until the edge of the board
-							viable = pathViability (x1, i, x2, y2, Direction.right, turn_count);
-							if (viable == true)
-								return viable;
-						}
-						else if (x1 >= 0) {	// Try up until the edge of the board
-							viable = pathViability (x1, i, x2, y2, Direction.up, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-						else if (x1 <= this.height + 1) {	// Try down until the edge of the board
-							viable = pathViability (i, y1, x2, y2, Direction.down, turn_count + 1);
-							if (viable == true)
-								return viable;
-						}
-					}
-					while (viable == false && turn_count < 2);
-				}
-				break;
-			default:
-				// [Error Check] need to implement to prevent bad arguments
-				break;
-			}
-			*/
 		}
 	}
 }
