@@ -64,9 +64,15 @@ namespace ShisenSho
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		}
 
-		private void OnScrambleActivated(object sender, EventArgs args)
+		private void OnScrambleActivated (object sender, EventArgs args)
 		{
 			c.scramble_board ();
+			table.update ();
+		}
+
+		private void NewGameActivated (object sender, EventArgs args)
+		{
+			c.newGame ();
 			table.update ();
 		}
 
@@ -77,7 +83,7 @@ namespace ShisenSho
 			Menu menu = new Menu();
 
 			MenuItem item = new MenuItem ("New Game");
-			//item.Activated += NewGame;
+			item.Activated += NewGameActivated;
 			menu.Append (item);
 
 			entry.Submenu = menu;

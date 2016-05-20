@@ -24,6 +24,9 @@ namespace ShisenSho
 			
 		public void update ()
 		{
+			crossed = false;
+			selected = null;
+
 			//Destroy all childrens
 			foreach (Widget child in this.Children) {
 				child.Destroy ();
