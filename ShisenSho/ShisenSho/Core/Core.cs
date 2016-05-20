@@ -20,6 +20,11 @@ namespace ShisenSho
 			this.height = height;
 			this.width = width;
 			this.brickNumber = brickNumber;
+			newGame ();
+		}
+
+		public void newGame ()
+		{
 			this.brickCount = height * width;
 			board = new int[this.width + 2,this.height + 2];
 			this.rnd = new Random ();
