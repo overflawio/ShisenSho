@@ -4,6 +4,7 @@
 <li>Replace cross.svg whit a black semi-transparent layer</li>
 <li>Implement a function that checks if the move is possible</li>
 <li>Detect gameover/win</li>
+<li>Disable double click to full-screen function of gtk</li>
 </ul>
 
 Collaborators:
