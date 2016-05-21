@@ -112,6 +112,8 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
 		{
+			if (turn_count > 3)
+				return false;
 			int i;
 
 			if (board [x1, y1] == board [x2, y2]) {
@@ -121,13 +123,22 @@ namespace ShisenSho
 			return false;
 
 			if (d == Direction.none) {
+				/*
 				Console.WriteLine ("Searching the next direction to explore");
 				Console.WriteLine ("Recursion with new direction");
+				*/
+				if (!pathViability (x1, y1, x2, y2, Direction.up, turn_count + 1))
+				if (!pathViability (x1, y1, x2, y2, Direction.right, turn_count + 1))
+				if (!pathViability (x1, y1, x2, y2, Direction.left, turn_count + 1))
+				if (!pathViability (x1, y1, x2, y2, Direction.down, turn_count + 1))
+					return false;
+							else return true;
+						else return true;
+					else return true;
+				else return true;
+					
 			} else {
 				switch (d) {
-				case Direction.none:
-					// WIP					
-					break;
 				case Direction.up:
 				// First check if the second tile is in the same column of the first one
 					if (y1 == y2) {
