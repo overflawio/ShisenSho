@@ -10,6 +10,11 @@ namespace ShisenSho
 		VBox vContainer;			// Vertical container box
 		HBox hContainer;			// Horizontal container box
 
+		MenuBar menuBar;
+
+		int scale;
+
+
 		public GameWindow (Core c) : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
@@ -17,12 +22,15 @@ namespace ShisenSho
 			this.c = c;
 
 			// Workaround needed to not exceed window dimension on HD screen or lesser
-			int scale = (Screen.Height < 1000) ? 4 : 5;
+			scale = (Screen.Height < 1000) ? 4 : 5;
 
-			this.table = new TableWidget (c, scale);
-			this.vContainer = new VBox ();
-			this.hContainer = new HBox ();
+			table = new TableWidget (c, scale);
+			vContainer = new VBox ();
+			hContainer = new HBox ();
 
+			menuBar = createMenu ();
+
+			this.vContainer.PackStart(menuBar, false, false, 0);
 			this.vContainer.PackStart (this.table, false, false, 0);
 
 			hContainer.PackStart (new HBox ());
@@ -54,6 +62,44 @@ namespace ShisenSho
 			this.DefaultHeight = 300;
 			this.Show ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+		}
+
+		private void OnScrambleActivated (object sender, EventArgs args)
+		{
+			c.scramble_board ();
+			table.update ();
+		}
+
+		private void NewGameActivated (object sender, EventArgs args)
+		{
+			c.newGame ();
+			table.update ();
+		}
+
+		private MenuBar createMenu ()
+		{
+			MenuBar m = new MenuBar ();
+			MenuItem entry = new MenuItem("Table");
+			Menu menu = new Menu();
+
+			MenuItem item = new MenuItem ("New Game");
+			item.Activated += NewGameActivated;
+			menu.Append (item);
+
+			entry.Submenu = menu;
+			m.Append(entry);
+
+			entry = new MenuItem ("Board");
+			menu = new Menu ();
+
+			item = new MenuItem("Scramble");
+			item.Activated += OnScrambleActivated;
+			menu.Append(item);
+
+			entry.Submenu = menu;
+			m.Append (entry);
+
+			return m;
 		}
 
 		protected void OnDeleteEvent (object sender, DeleteEventArgs a)
