@@ -9,11 +9,13 @@ namespace ShisenSho
 		private Core c;
 		private bool brickChecked;	// True if a brick is checked
 		private BrickWidget selected;
+		private GameWindow gameWindow;
 
-		public TableWidget (Core core, int scale) : base ((uint)core.getBoardHeight () + 2, (uint)core.getBoardWidth () + 2, true) // +2 is added at both values because we need empty boxes in the outline
+		public TableWidget (Core core, GameWindow gameWindow, int scale) : base ((uint)core.getBoardHeight () + 2, (uint)core.getBoardWidth () + 2, true) // +2 is added at both values because we need empty boxes in the outline
 		{
 			this.c = core;
 			this.s = scale;
+			this.gameWindow = gameWindow;
 			brickChecked = false;
 		}
 
@@ -33,8 +35,10 @@ namespace ShisenSho
 			}
 			//add all children
 			populateBoard ();
-			if (c.getBrickCount () == 0)
+			if (c.getBrickCount () == 0) {
 				Console.WriteLine ("You won, need to implement a popup");
+				gameWindow.NewGameActivated (null, null);	// WIP this is bad. just testing
+			}
 			else
 			{
 				if (c.getBrickCount () == 4)

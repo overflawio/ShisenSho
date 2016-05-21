@@ -24,7 +24,7 @@ namespace ShisenSho
 			// Workaround needed to not exceed window dimension on HD screen or lesser
 			scale = (Screen.Height < 1000) ? 4 : 5;
 
-			table = new TableWidget (c, scale);
+			table = new TableWidget (c,this , scale);
 			vContainer = new VBox ();
 			hContainer = new HBox ();
 
@@ -70,7 +70,7 @@ namespace ShisenSho
 			table.update ();
 		}
 
-		private void NewGameActivated (object sender, EventArgs args)
+		public void NewGameActivated (object sender, EventArgs args)
 		{
 			c.newGame ();
 			table.update ();
