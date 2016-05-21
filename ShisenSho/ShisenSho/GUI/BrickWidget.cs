@@ -47,7 +47,7 @@ namespace ShisenSho
 			Gdk.Pixbuf display;
 			string basePath = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().GetName ().CodeBase).Substring (5);
 			try {
-				display = new Gdk.Pixbuf (basePath + @"/svg/cross.svg", this.scale, this.scale);
+				display = new Gdk.Pixbuf (basePath + @"/svg/filter.svg", this.scale, this.scale);
 			} catch (GLib.GException e) {
 				Console.WriteLine (e);
 				display = null;

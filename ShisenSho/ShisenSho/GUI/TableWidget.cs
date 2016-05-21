@@ -7,14 +7,14 @@ namespace ShisenSho
 	{
 		private int s;
 		private Core c;
-		private bool crossed;
+		private bool brickChecked;	// True if a brick is checked
 		private BrickWidget selected;
 
 		public TableWidget (Core core, int scale) : base ((uint)core.getBoardHeight () + 2, (uint)core.getBoardWidth () + 2, true) // +2 is added at both values because we need empty boxes in the outline
 		{
 			this.c = core;
 			this.s = scale;
-			crossed = false;
+			brickChecked = false;
 		}
 
 		private void attachBrick (Widget w, int x, int y)
@@ -24,7 +24,7 @@ namespace ShisenSho
 			
 		public void update ()
 		{
-			crossed = false;
+			brickChecked = false;
 			selected = null;
 
 			//Destroy all childrens
@@ -67,12 +67,12 @@ namespace ShisenSho
 
 			if( ((Gdk.EventButton)args.Event).Type == Gdk.EventType.ButtonPress)
 			{
-				if (!crossed) {
-					crossed = true;
+				if (!brickChecked) {
+					brickChecked = true;
 					selected = brick;
 					Fixed f = (Fixed)(brick.Child);
-					Image cross = brick.checkBrick ();
-					f.Add (cross);
+					Image check = brick.checkBrick ();
+					f.Add (check);
 					f.ShowAll ();
 				} else {
 					Fixed f = (Fixed)(selected.Child);
@@ -80,18 +80,18 @@ namespace ShisenSho
 						f.Remove (f.Children [1]);
 					
 					if (selected == brick) {
-						crossed = false;
+						brickChecked = false;
 					} else {
 						if (!c.makeMove (selected.getX (), selected.getY (),
 							    brick.getX (), brick.getY ())) {
 							selected = brick;
 							f = (Fixed)(brick.Child);
-							Image cross = brick.checkBrick ();
-							f.Add (cross);
+							Image check = brick.checkBrick ();
+							f.Add (check);
 							f.ShowAll ();
 						} else {
 							selected = null;
-							crossed = false;
+							brickChecked = false;
 							update ();
 						}
 					}
