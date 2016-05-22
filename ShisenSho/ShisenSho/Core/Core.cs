@@ -40,7 +40,10 @@ namespace ShisenSho
 			// Initializing the array
 			for (i = 0; i < brickNumber; i++)
 				numBrick [i] = (this.width * this.height) / brickNumber;	// Number of instances of the same brick
-
+			// Initializing the board
+			for (i = 0; i <= this.height + 1; i++)
+				for (j = 0; j <= this.width + 1; j++)
+					board [j, i] = 0;
 			// Placing bricks
 			for (i = 1; i <= this.height; i++)	// Rows
 				for (j = 1; j <= this.width; j++) {	// Column
