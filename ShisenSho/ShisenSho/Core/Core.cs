@@ -46,7 +46,7 @@ namespace ShisenSho
 				for (j = 1; j <= this.width; j++) {	// Column
 					do 
 					{
-						k = (rnd.Next () % (brickNumber - 1));
+						k = (rnd.Next () % brickNumber);
 						if (k != (brickNumber - 1) && numBrick [k] == 0 && numBrick [k + 1] != 0)
 							k++;
 						else if (k != 0 && numBrick [k] == 0 && numBrick [k - 1] != 0)
