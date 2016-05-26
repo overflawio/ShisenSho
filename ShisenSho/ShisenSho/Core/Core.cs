@@ -12,7 +12,7 @@ namespace ShisenSho
 		private int width;
 		private int brickNumber;	// Number of different type of bricks
 		private int [,] board;
-		private int brickCount;	// Number of bricks whit value != NO_BRICK_TYPE
+		private int brickCount;	// Number of bricks with value != NO_BRICK_TYPE
 		private Random rnd;
 
 		public Core (int height, int width, int brickNumber)
@@ -84,7 +84,8 @@ namespace ShisenSho
 
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
-			bool res = pathViability (x1,y1,x2,y2,Direction.none,0); // recursive call that checks if there is a path from a brick to another one
+			bool res = pathViability (x1, y1, x2, y2); // Checks if there is a path
+
 			if (res)
 			{
 				board [x1, y1] = board [x2, y2] = NO_BRICK_TYPE;
@@ -114,88 +115,84 @@ namespace ShisenSho
 					}
 		}	
 
-		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
+		private bool pathViability (int x1, int y1, int x2, int y2)
 		{
-			if (turn_count > 3)
+			int i, j, example;
+
+			if (board [x1, y1] != board [x2, y2])
 				return false;
-			int i;
-
-			if (board [x1, y1] == board [x2, y2]) {
-
-				return true;
+			
+			/*** Checking all the cases ***/
+			// Selected tiles on the same column
+			if (x1 == x2) {
+				if (y1 > y2) {	// Need to go up
+					if (checkPath (x1, y1, x2, y2, 1))
+						return true;
+					else if (checkPath (x1, y1, x2, y2, 2))
+						return true;
+					else
+						return false;
+				}	// End if where you need to go up
+				else if (y2 > y1) {	// Need to go down
+					// Same as above, just swap the tiles' coordinates
+					if (checkPath (x2, y2, x1, y1, 1))
+						return true;
+					else if (checkPath (x2, y2, x1, y1, 2))
+						return true;
+					else
+						return false;
+				}	// End if where you need to go down
 			}
-			return false;
 
-			if (d == Direction.none) {
-				/*
-				Console.WriteLine ("Searching the next direction to explore");
-				Console.WriteLine ("Recursion with new direction");
-				*/
-				if (!pathViability (x1, y1, x2, y2, Direction.up, turn_count + 1))
-				if (!pathViability (x1, y1, x2, y2, Direction.right, turn_count + 1))
-				if (!pathViability (x1, y1, x2, y2, Direction.left, turn_count + 1))
-				if (!pathViability (x1, y1, x2, y2, Direction.down, turn_count + 1))
+		}
+
+		private bool checkPath (int x1, int y1, int x2, int y2, int example)
+		{
+			int i, j;
+
+			switch (example) {
+			case 1:	// Tiles on the same row/column, 0 turns
+				for (j = y1 - 1; (j > y2 || board [x1, j] != 0); j--)
+					;
+				if (j == y2)	// Case one
+					return true;
+				else
 					return false;
-							else return true;
-						else return true;
-					else return true;
-				else return true;
-					
-			} else {
-				switch (d) {
-				case Direction.up:
-				// First check if the second tile is in the same column of the first one
-					if (y1 == y2) {
-						// Check if the second tile is next to the first one
-						if (x2 == x1 - 1)
-							return true;
-						else
-							for (i = x1 - 1; (board [i, y1] == 0 && i > 0); i--)
-								if (board [i, y1] == board [x1, y1])	// To be handled within the GUI
-							return true;
-					} else
-						return false;
-					break;
-				case Direction.down:
-					// First check if the second tile is in the same column of the first one
-					if (y1 == y2) {
-						// Check if the second tile is next to the first one
-						if (x2 == x1 + 1)
-							return true;
-						else
-							for (i = x1 + 1; (board [i, y1] == 0 || i < this.height + 1); i++)
-								if (board [i, y1] == board [x1, y1])	// To be handled within the GUI
-									return true;
-					} else
-						return false;
-					break;
-				case Direction.left:
-					// First check if the second tile is in the same row of the first one
-					if (x1 == x2) {
-						// Check if the second tile is next to the first one
-						if (y2 == y1 - 1)
-							return true;
-						else
-							for (i = y1 - 1; (board [x1, i] == 0 || i > 0); i--)
-								if (board [x1, i] == board [x1, y1])	// To be handled within the GUI
-									return true;
-					} else
-						return false;
-					break;
-				case Direction.right:
-					// First check if the second tile is in the same row of the first one
-					if (x1 == x2) {
-						// Check if the second tile is next to the first one
-						if (y2 == y1 + 1)
-							return true;
-						else
-							for (i = y1 + 1; (board [x1, i] == 0 || i < this.width + 1); i++)
-								if (board [x1, i] == board [x1, y1])	// To be handled within the GUI
-									return true;
-					} else
-						return false;
-					break;
-				}
+				break;
+			case 2:	// Tiles on the same row/column, 2 turns
+				if (board [x1 - 1, y1] != 0) {	// Try left
+					i = x1 - 1;
+					do {	// Then go up
+						for (j = y1 - 1; (j > y2 || board [i, j] != 0); j--)
+							;
+						i--;
+					} while (j != y2 || i >= 0 || board [i, y1] != 0);
+					if (j == y2) {	// Go right (last turn)
+						for (i = i + 1; (i < x2 || board [i, y1] != 0); i++)
+							;
+						if (i == x2)
+							return true;	// End of case three (left-up-right)
+					}								
+				} else if (board [x1 + 1, y1] != 0) {	// Otherwise try right
+					i = x1 + 1;
+					do {	// Then go up
+						for (j = y1 - 1; (j > y2 || board [i, j] != 0); j--)
+							;
+						i++;
+					} while (j != y2 || i <= this.width + 1 || board [i, y1] != 0);
+					if (j == y2) {	// Go left (last turn)
+						for (i = i - 1; (i > x2 || board [i, j] != 0); i--)
+							;
+						if (i == x2)
+							return true;	// End of case three (right-up-left)
+					}
+				} else
+					return false;	// It's impossible to go left or right
+				break;
+				// WIP
+			default:
+				// To be implemented
+				break;
 			}
 		}
 	}
