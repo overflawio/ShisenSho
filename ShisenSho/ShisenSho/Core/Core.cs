@@ -84,6 +84,7 @@ namespace ShisenSho
 
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
+			Console.WriteLine (x1 + " " + y1 + " " + x2 + " " + y2);
 			bool res = pathViability (x1, y1, x2, y2); // Checks if there is a path
 
 			if (res)
@@ -117,82 +118,140 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2)
 		{
-			int i, j, example;
-
 			if (board [x1, y1] != board [x2, y2])
 				return false;
-			
 			/*** Checking all the cases ***/
-			// Selected tiles on the same column
-			if (x1 == x2) {
-				if (y1 > y2) {	// Need to go up
+			else if (x1 == x2) {		// Selected tiles on the same column
+				if (y1 > y2) {	// Go up
 					if (checkPath (x1, y1, x2, y2, 1))
 						return true;
-					else if (checkPath (x1, y1, x2, y2, 2))
-						return true;
-					else
-						return false;
-				}	// End if where you need to go up
-				else if (y2 > y1) {	// Need to go down
-					// Same as above, just swap the tiles' coordinates
+					else {
+						if (board [x1 - 1, y1] == 0)	// Try starting from the left
+							return checkPath (x1, y1, x2, y2, 3);
+						else if (board [x1 + 1, y1] == 0)	// Otherwise try from the right
+							return checkPath (x1, y1, x2, y2, 4);
+						else
+							return false;
+					}
+				} else if (y1 < y2) {	// Go down (same as before, just swapping the input tiles)
 					if (checkPath (x2, y2, x1, y1, 1))
 						return true;
-					else if (checkPath (x2, y2, x1, y1, 2))
-						return true;
-					else
-						return false;
-				}	// End if where you need to go down
+					else {
+						if (board [x1 - 1, y1] == 0)	// Try starting from the left
+							return checkPath (x2, y2, x1, y1, 3);
+						else if (board [x1 + 1, y1] == 0)	// Otherwise try from the right
+							return checkPath (x2, y2, x1, y1, 4);
+						else
+							return false;
+					}
+				} else
+					return false;
 			}
-
+			else if (y1 == y2) {		// Selected tiles on the same row
+				if (x1 > x2) {	// Go left
+					if (checkPath (x1, y1, x2, y2, 2))
+						return true;
+					else {
+						if (board [x1, y1 - 1] == 0)	// Try starting from the top
+							return checkPath (x1, y1, x2, y2, 5);
+						else if (board [x1, y1 + 1] == 0)	// Otherwise try from the bottom
+							return false; //checkPath (x1, y1, x2, y2, 6);
+						else
+							return false;
+					}
+				}
+				else if (x1 < x2) {	// Go right
+					if (checkPath (x2, y2, x1, y1, 2))
+						return true;
+					else {
+						if (board [x1, y1 - 1] == 0)	// Try starting from the top
+							return checkPath (x2, y2, x1, y1, 5);
+						else if (board [x1, y1 + 1] == 0)	// Otherwise try from the bottom
+							return false; //checkPath (x2, y2, x1, y1, 6);
+						else
+							return false;
+					}
+				}
+				else
+					return false;
+			}
+			else
+				return false;
 		}
-
+			
 		private bool checkPath (int x1, int y1, int x2, int y2, int example)
 		{
 			int i, j;
 
 			switch (example) {
-			case 1:	// Tiles on the same row/column, 0 turns
-				for (j = y1 - 1; (j > y2 || board [x1, j] != 0); j--)
+			case 1:	// Tiles on the same column, 0 turns
+				for (j = y1 - 1; (j != y2 && board [x1, j] == 0 && j >= 0); j--)
 					;
-				if (j == y2)	// Case one
-					return true;
-				else
+				if (j != y2)	// Case one
 					return false;
-				break;
-			case 2:	// Tiles on the same row/column, 2 turns
-				if (board [x1 - 1, y1] != 0) {	// Try left
-					i = x1 - 1;
-					do {	// Then go up
-						for (j = y1 - 1; (j > y2 || board [i, j] != 0); j--)
-							;
-						i--;
-					} while (j != y2 || i >= 0 || board [i, y1] != 0);
-					if (j == y2) {	// Go right (last turn)
-						for (i = i + 1; (i < x2 || board [i, y1] != 0); i++)
-							;
-						if (i == x2)
-							return true;	// End of case three (left-up-right)
-					}								
-				} else if (board [x1 + 1, y1] != 0) {	// Otherwise try right
-					i = x1 + 1;
-					do {	// Then go up
-						for (j = y1 - 1; (j > y2 || board [i, j] != 0); j--)
-							;
-						i++;
-					} while (j != y2 || i <= this.width + 1 || board [i, y1] != 0);
-					if (j == y2) {	// Go left (last turn)
-						for (i = i - 1; (i > x2 || board [i, j] != 0); i--)
-							;
-						if (i == x2)
-							return true;	// End of case three (right-up-left)
-					}
-				} else
-					return false;	// It's impossible to go left or right
-				break;
-				// WIP
+				else
+					return true;
+			case 2:	// Tiles on the same row, 0 turns
+				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)
+					;
+				if (i != x2)	// Case one
+					return false;
+				else
+					return true;
+			case 3:	// Tiles on the same column, 2 turns, start by going left
+				i = x1 - 1;
+				do {	// Then go up
+					for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+						;
+					i--;
+				} while (j != y2 && i >= 0 && board [i, y1] == 0);
+				if (j == y2) {	// Go right (last turn)
+					for (i = i + 2; (i < x2 && board [i, y1] == 0); i++)
+						;
+					if (i == x2)
+						return true;	// End of case three (left-up-right)
+					else
+						return false;
+				}
+				else 
+					return false;
+			case 4:	// Tiles on the same column, 2 turns, start by going right
+				i = x1 + 1;
+				do {	// Then go up
+					for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+						;
+					i++;
+				} while (j != y2 && i <= this.width + 1 && board [i, y1] == 0);
+				if (j == y2) {	// Go left (last turn)
+					for (i = i - 2; (i > x2 && board [i, y1] == 0); i--)
+						;
+					if (i == x2)
+						return true;	// End of case four (right-up-left)
+					else
+						return false;
+				}
+				else 
+					return false;
+			case 5:	// Tiles on the same row, start by going up
+				j = y1 - 1;
+				do {	// Then go left
+					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+						;
+					j--;
+				} while (i != x2 && j >= 0 && board [x1, j] == 0);
+				if (i == x2) {	// Go down (last turn)
+					for (j = j + 2; (j < y2 && board [x1, j] == 0); j++)
+						;
+					if (j == y2)
+						return true;	// End of case three (up-left-down)
+					else
+						return false;
+				}
+				else 
+					return false;
 			default:
 				// To be implemented
-				break;
+				return true;
 			}
 		}
 	}
