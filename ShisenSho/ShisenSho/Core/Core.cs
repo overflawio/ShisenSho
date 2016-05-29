@@ -118,6 +118,8 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2)
 		{
+			int i, j;
+
 			if (board [x1, y1] != board [x2, y2])
 				return false;
 			/*** Checking all the cases ***/
@@ -174,6 +176,18 @@ namespace ShisenSho
 				}
 				else
 					return false;
+			}
+			else if (x2 < x1 && y2 < y1) {	// Second tile is top-left
+				// First try the shortest path
+				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)
+					;
+				if (i == x2) {
+					if (checkPath (i, y1, x2, y2, 1))	// Go up
+						return true;
+					else
+						return false;
+				} else
+					return false;	// WIP
 			}
 			else
 				return false;
@@ -252,7 +266,7 @@ namespace ShisenSho
 			case 6:
 				j = y1 + 1;
 				do {	// Then go left
-					for (i = x1 + 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
 						;
 					j++;
 				} while (i != x2 && j <= this.height && board [x1, j] == 0);
