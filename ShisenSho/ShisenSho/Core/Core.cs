@@ -242,7 +242,7 @@ namespace ShisenSho
 					i--;
 				} while (j != y2 && i >= 0 && board [i, y1] == 0);
 				if (j == y2) {	// Go right (last turn)
-					for (i = i + 2; (i < x2 && board [i, j] == 0); i++)
+					for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
 						;
 					if (i == x2)
 						return true;	// End of case three (left-up-right)
@@ -259,7 +259,7 @@ namespace ShisenSho
 					i++;
 				} while (j != y2 && i <= this.width + 1 && board [i, y1] == 0);
 				if (j == y2) {	// Go left (last turn)
-					for (i = i - 2; (i > x2 && board [i, j] == 0); i--)
+					for (i = i - 1; (i > x2 && board [i, j] == 0); i--)
 						;
 					if (i == x2)
 						return true;	// End of case four (right-up-left)
@@ -276,7 +276,7 @@ namespace ShisenSho
 					j--;
 				} while (i != x2 && j >= 0 && board [x1, j] == 0);
 				if (i == x2) {	// Go down (last turn)
-					for (j = j + 2; (j < y2 && board [i, j] == 0); j++)
+					for (j = j + 1; (j < y2 && board [i, j] == 0); j++)
 						;
 					if (j == y2)
 						return true;	// End of case three (up-left-down)
@@ -293,7 +293,7 @@ namespace ShisenSho
 					j++;
 				} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
 				if (i == x2) {	// Go up (last turn)
-					for (j = j - 2; (j > y2 && board [i, j] == 0); j--)
+					for (j = j - 1; (j > y2 && board [i, j] == 0); j--)
 						;
 					if (j == y2)
 						return true;	// End of case three (down-left-up)
