@@ -128,8 +128,10 @@ namespace ShisenSho
 					if (checkPath (x1, y1, x2, y2, 1))
 						return true;
 					else {
-						if (board [x1 - 1, y1] == 0)	// Try starting from the left
-							return checkPath (x1, y1, x2, y2, 3);
+						if (board [x1 - 1, y1] == 0  	// Try starting from the left
+							&& checkPath (x1, y1, x2, y2, 3)) {
+								return true;
+						}
 						else if (board [x1 + 1, y1] == 0)	// Otherwise try from the right
 							return checkPath (x1, y1, x2, y2, 4);
 						else
@@ -139,8 +141,10 @@ namespace ShisenSho
 					if (checkPath (x2, y2, x1, y1, 1))
 						return true;
 					else {
-						if (board [x1 - 1, y1] == 0)	// Try starting from the left
-							return checkPath (x2, y2, x1, y1, 3);
+						if (board [x1 - 1, y1] == 0  	// Try starting from the left
+							&& checkPath (x2, y2, x1, y1, 3)) {
+							return true;
+						}
 						else if (board [x1 + 1, y1] == 0)	// Otherwise try from the right
 							return checkPath (x2, y2, x1, y1, 4);
 						else
@@ -154,8 +158,10 @@ namespace ShisenSho
 					if (checkPath (x1, y1, x2, y2, 2))
 						return true;
 					else {
-						if (board [x1, y1 - 1] == 0)	// Try starting from the top
-							return checkPath (x1, y1, x2, y2, 5);
+						if (board [x1, y1 - 1] == 0  	// Try starting from the top
+							&& checkPath (x1, y1, x2, y2, 5)) {
+							return true;
+						}
 						else if (board [x1, y1 + 1] == 0)	// Otherwise try from the bottom
 							return checkPath (x1, y1, x2, y2, 6);
 						else
@@ -166,8 +172,10 @@ namespace ShisenSho
 					if (checkPath (x2, y2, x1, y1, 2))
 						return true;
 					else {
-						if (board [x1, y1 - 1] == 0)	// Try starting from the top
-							return checkPath (x2, y2, x1, y1, 5);
+						if (board [x1, y1 - 1] == 0  	// Try starting from the top
+							&& checkPath (x2, y2, x1, y1, 5)) {
+							return true;
+						}
 						else if (board [x1, y1 + 1] == 0)	// Otherwise try from the bottom
 							return checkPath (x2, y2, x1, y1, 6);
 						else
@@ -177,7 +185,7 @@ namespace ShisenSho
 				else
 					return false;
 			}
-			else if (x2 < x1 && y2 < y1) {	// Second tile is top-left
+			/*else if (x2 < x1 && y2 < y1) {	// Second tile is top-left
 				// First try the shortest path (left-up)
 				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)	// Go left
 					;
@@ -202,7 +210,7 @@ namespace ShisenSho
 						return false;
 				} else
 					return false;	// WIP	
-			}
+			}*/
 			else
 				return false;
 		}
@@ -234,7 +242,7 @@ namespace ShisenSho
 					i--;
 				} while (j != y2 && i >= 0 && board [i, y1] == 0);
 				if (j == y2) {	// Go right (last turn)
-					for (i = i + 2; (i < x2 && board [i, y1] == 0); i++)
+					for (i = i + 2; (i < x2 && board [i, j] == 0); i++)
 						;
 					if (i == x2)
 						return true;	// End of case three (left-up-right)
@@ -251,7 +259,7 @@ namespace ShisenSho
 					i++;
 				} while (j != y2 && i <= this.width + 1 && board [i, y1] == 0);
 				if (j == y2) {	// Go left (last turn)
-					for (i = i - 2; (i > x2 && board [i, y1] == 0); i--)
+					for (i = i - 2; (i > x2 && board [i, j] == 0); i--)
 						;
 					if (i == x2)
 						return true;	// End of case four (right-up-left)
@@ -268,7 +276,7 @@ namespace ShisenSho
 					j--;
 				} while (i != x2 && j >= 0 && board [x1, j] == 0);
 				if (i == x2) {	// Go down (last turn)
-					for (j = j + 2; (j < y2 && board [x1, j] == 0); j++)
+					for (j = j + 2; (j < y2 && board [i, j] == 0); j++)
 						;
 					if (j == y2)
 						return true;	// End of case three (up-left-down)
@@ -283,9 +291,9 @@ namespace ShisenSho
 					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
 						;
 					j++;
-				} while (i != x2 && j <= this.height && board [x1, j] == 0);
+				} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
 				if (i == x2) {	// Go up (last turn)
-					for (j = j - 2; (j > y2 && board [x1, j] == 0); j--)
+					for (j = j - 2; (j > y2 && board [i, j] == 0); j--)
 						;
 					if (j == y2)
 						return true;	// End of case three (down-left-up)
