@@ -86,7 +86,7 @@ namespace ShisenSho
 		{
 			Console.WriteLine (x1 + " " + y1 + " " + x2 + " " + y2);
 
-			if (x1 > x2 || (x1 == x2 && y1 > y2))
+			if (x1 < x2 || (x1 == x2 && y1 < y2))
 			{
 				int temp = x1;
 				x1 = x2;
@@ -134,8 +134,7 @@ namespace ShisenSho
 			if (board [x1, y1] != board [x2, y2])
 				return false;
 			/*** Checking all the cases ***/
-			else if (x1 == x2) {		// Selected tiles on the same column
-				if (y1 > y2) {	// Go up
+			else if (x1 == x2 && y1 > y2) {		// Selected tiles on the same column ***CASE 4***
 					if (checkPath (x1, y1, x2, y2, 1))
 						return true;
 					else {
@@ -148,24 +147,8 @@ namespace ShisenSho
 						else
 							return false;
 					}
-				} else if (y1 < y2) {	// Go down (same as before, just swapping the input tiles)
-					if (checkPath (x2, y2, x1, y1, 1))
-						return true;
-					else {
-						if (board [x2 - 1, y2] == 0  	// Try starting from the left
-							&& checkPath (x2, y2, x1, y1, 3)) {
-							return true;
-						}
-						else if (board [x2 + 1, y2] == 0)	// Otherwise try from the right
-							return checkPath (x2, y2, x1, y1, 4);
-						else
-							return false;
-					}
-				} else
-					return false;
 			}
-			else if (y1 == y2) {		// Selected tiles on the same row
-				if (x1 > x2) {	// Go left
+			else if (y1 == y2 && x1 > x2) {		// Selected tiles on the same row ***CASE 3***
 					if (checkPath (x1, y1, x2, y2, 2))
 						return true;
 					else {
@@ -178,25 +161,8 @@ namespace ShisenSho
 						else
 							return false;
 					}
-				}
-				else if (x1 < x2) {	// Go right
-					if (checkPath (x2, y2, x1, y1, 2))
-						return true;
-					else {
-						if (board [x2, y2 - 1] == 0  	// Try starting from the top
-							&& checkPath (x2, y2, x1, y1, 5)) {
-							return true;
-						}
-						else if (board [x2, y2 + 1] == 0)	// Otherwise try from the bottom
-							return checkPath (x2, y2, x1, y1, 6);
-						else
-							return false;
-					}
-				}
-				else
-					return false;
 			}
-			else if (x2 < x1 && y2 < y1) {	// Second tile is top-left
+			/*else if (x1 < x2 && y1 < y2) {	// Second tile is 
 				// First try the shortest path (left-up)
 				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)	// Go left
 					;
@@ -208,7 +174,7 @@ namespace ShisenSho
 				} else
 					return false;
 			}
-			/*else if (x2 > x1 && y2 > y1) {	// Same path as above, just swapping the tiles' order
+			else if (x2 > x1 && y2 > y1) {	// Same path as above, just swapping the tiles' order
 				// First try the shortest paths
 					// down-right
 				for (j = y1 + 1; (j != y2 && board [x1, j] == 0 && j <= this.height + 1); j++)	// Go down
