@@ -141,11 +141,11 @@ namespace ShisenSho
 					if (checkPath (x2, y2, x1, y1, 1))
 						return true;
 					else {
-						if (board [x1 - 1, y1] == 0  	// Try starting from the left
+						if (board [x2 - 1, y2] == 0  	// Try starting from the left
 							&& checkPath (x2, y2, x1, y1, 3)) {
 							return true;
 						}
-						else if (board [x1 + 1, y1] == 0)	// Otherwise try from the right
+						else if (board [x2 + 1, y2] == 0)	// Otherwise try from the right
 							return checkPath (x2, y2, x1, y1, 4);
 						else
 							return false;
@@ -172,11 +172,11 @@ namespace ShisenSho
 					if (checkPath (x2, y2, x1, y1, 2))
 						return true;
 					else {
-						if (board [x1, y1 - 1] == 0  	// Try starting from the top
+						if (board [x2, y2 - 1] == 0  	// Try starting from the top
 							&& checkPath (x2, y2, x1, y1, 5)) {
 							return true;
 						}
-						else if (board [x1, y1 + 1] == 0)	// Otherwise try from the bottom
+						else if (board [x2, y2 + 1] == 0)	// Otherwise try from the bottom
 							return checkPath (x2, y2, x1, y1, 6);
 						else
 							return false;
@@ -185,7 +185,7 @@ namespace ShisenSho
 				else
 					return false;
 			}
-			/*else if (x2 < x1 && y2 < y1) {	// Second tile is top-left
+			else if (x2 < x1 && y2 < y1) {	// Second tile is top-left
 				// First try the shortest path (left-up)
 				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)	// Go left
 					;
@@ -197,7 +197,7 @@ namespace ShisenSho
 				} else
 					return false;
 			}
-			else if (x2 > x1 && y2 > y1){	// Same path as above, just swapping the tiles' order
+			/*else if (x2 > x1 && y2 > y1) {	// Same path as above, just swapping the tiles' order
 				// First try the shortest paths
 					// down-right
 				for (j = y1 + 1; (j != y2 && board [x1, j] == 0 && j <= this.height + 1); j++)	// Go down
