@@ -85,6 +85,17 @@ namespace ShisenSho
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
 			Console.WriteLine (x1 + " " + y1 + " " + x2 + " " + y2);
+
+			if (x1 > x2 || (x1 == x2 && y1 > y2))
+			{
+				int temp = x1;
+				x1 = x2;
+				x2 = temp;
+				temp = y1;
+				y1 = y2;
+				y2 = temp;
+			}
+
 			bool res = pathViability (x1, y1, x2, y2); // Checks if there is a path
 
 			if (res)
