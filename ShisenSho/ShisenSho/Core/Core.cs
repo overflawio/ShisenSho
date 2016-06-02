@@ -129,8 +129,6 @@ namespace ShisenSho
 
 		private bool pathViability (int x1, int y1, int x2, int y2)
 		{
-			int i, j;
-
 			if (board [x1, y1] != board [x2, y2])
 				return false;
 			/*** Checking all the cases ***/
@@ -163,31 +161,12 @@ namespace ShisenSho
 					}
 			}
 			else if (x1 > x2 && y1 > y2) {	// Second tile is top-left ***CASE 1***
-				if (board [x1 - 1, y1] == 0) {	// Try left
-					// First try the shortest paths
-					for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
-						;
-					if (i == x2 && checkPath (i, y1, x2, y2, 1))	// Try going up
-							return true;
-					else if (i == x2 && checkPath (i, y1, x2, y2, 3))
-						return true;
-					else if (i != x2) {
-						i = x1 - 1;	// Go left
-						do {	// Then go up
-							for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
-								;
-							i--;
-						} while (j != y2 && i >= 0 && board [i, y1] == 0);
-						if (j == y2)	// Go left again (final step)
-							return checkPath (i + 1, j, x2, y2, 2);
-						else
-							return false;
-					} else
-						return false;
-				}else
-					return false;
-			}	// Do not modify the following code
-			else
+				if (board [x1 - 1, y1] == 0) {	// Try starting from the left
+					return checkPath (x1, y1, x2, y2, 7);
+				} else 	// Other cases
+					return false;					
+			}
+			else	// Specified for the compiler; end of al the cases
 				return false;
 		}
 			
@@ -278,6 +257,51 @@ namespace ShisenSho
 				}
 				else 
 					return false;
+			case 7:	// CASE 2: all paths starting from left
+				// First try the shortest paths
+				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
+					;
+				if (i == x2) {	// Try going up
+					for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+						;
+					if (j == y2)
+						return true;
+					else {	// Try left-up-right
+						i = i - 1;
+						do {	// Then go up
+							for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+								;
+							i--;
+						} while (j != y2 && i >= 0 && board [i, y1] == 0);
+						if (j == y2) {	// Go right (last turn)
+							for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
+								;
+							if (i == x2)
+								return true;	// End of case three (left-up-right)
+							else
+								return false;
+						} else
+							return false;
+					} // End left-up-right
+				} // End if (i == x2)
+				else {
+					i = x1 - 1;	// Go left
+					do {	// Then go up
+						for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
+							;
+						i--;
+					} while (j != y2 && i >= 0 && board [i, y1] == 0);
+					if (j != y2)
+						return false;
+					else {	// Go right (final step)
+						for ( ; (i != x2 && board [i, y1] == 0 && i >= 0); i--)
+							;
+						if (i == x2)
+							return true;
+						else
+							return false;
+					}
+				}
 			default:
 				// To be implemented
 				return true;
