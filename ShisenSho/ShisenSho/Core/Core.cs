@@ -132,7 +132,7 @@ namespace ShisenSho
 			if (board [x1, y1] != board [x2, y2])
 				return false;
 			/*** Checking all the cases ***/
-			else if (x1 == x2 && y1 > y2) {		// Selected tiles on the same column ***CASE 4***
+			else if (x1 == x2 && y1 > y2) {		// Selected tiles on the same column
 					if (checkPath (x1, y1, x2, y2, 1))
 						return true;
 					else {
@@ -146,7 +146,7 @@ namespace ShisenSho
 							return false;
 					}
 			}
-			else if (y1 == y2 && x1 > x2) {		// Selected tiles on the same row ***CASE 3***
+			else if (y1 == y2 && x1 > x2) {		// Selected tiles on the same row
 					if (checkPath (x1, y1, x2, y2, 2))
 						return true;
 					else {
@@ -161,9 +161,15 @@ namespace ShisenSho
 					}
 			}
 			else if (x1 > x2 && y1 > y2) {	// Second tile is top-left ***CASE 1***
-				if (board [x1 - 1, y1] == 0) {	// Try starting from the left
-					return checkPath (x1, y1, x2, y2, 7);
-				} else 	// Other cases
+				if (board [x1 - 1, y1] == 0 && checkPath (x1, y1, x2, y2, 7))	// Try starting from the left
+					return true;
+				else if (board [x1, y1 - 1] == 0 && checkPath (x1, y1, x2, y2, 8))	// Try starting from the top
+					return true;
+				else if (board [x1 + 1, y1] == 0 && checkPath (x1, y1, x2, y2, 4))	// Try starting from the right
+					return true;
+				else if (board [x1, y1 + 1] == 0 && checkPath (x1, y1, x2, y2, 6))	// Try starting from the bottom
+					return true;
+				else
 					return false;					
 			}
 			else	// Specified for the compiler; end of al the cases
@@ -257,7 +263,7 @@ namespace ShisenSho
 				}
 				else 
 					return false;
-			case 7:	// CASE 2: all paths starting from left
+			case 7:	// First tile bottom-left; all paths starting from left
 				// First try the shortest paths
 				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
 					;
@@ -294,9 +300,55 @@ namespace ShisenSho
 					if (j != y2)
 						return false;
 					else {	// Go right (final step)
-						for ( ; (i != x2 && board [i, y1] == 0 && i >= 0); i--)
+						for ( ; (i != x2 && board [i, j] == 0 && i >= 0); i--)
 							;
 						if (i == x2)
+							return true;
+						else
+							return false;
+					}
+				}
+			case 8:	// First tile bottom-left; all paths starting from the top
+				// First try the shortest paths
+				for (j = y1; (j != y2 && board [x1, y1 - 1] == 0 && j >= 0); j--)	// Go up
+					;
+				if (j == y2) {	// Try going left
+					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+						;
+					if (i == x2)
+						return true;
+					else {	// Try up-left-down
+						j = y1 - 1;
+						do {	// Then go left
+							for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+								;
+							j--;
+						} while (i != x2 && j >= 0 && board [x1, j] == 0);
+						if (i == x2) {	// Go down (last turn)
+							for (j = j + 1; (j < y2 && board [i, j] == 0); j++)
+								;
+							if (j == y2)
+								return true;	// End of case three (up-left-down)
+							else
+								return false;
+						}
+						else 
+							return false;
+					} // End up-left-down
+				} // End if (j == y2)
+				else {
+					j = y1 - 1;	// Go up
+					do {	// Then go left
+						for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+							;
+						j--;
+					} while (i != x2 && j >= 0 && board [x1, j] == 0);
+					if (i != x2)
+						return false;
+					else {	// Go up (final step)
+						for ( ; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+							;
+						if (j == y2)
 							return true;
 						else
 							return false;
