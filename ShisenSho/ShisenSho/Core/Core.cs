@@ -160,7 +160,7 @@ namespace ShisenSho
 							return false;
 					}
 			}
-			else if (x1 > x2 && y1 > y2) {	// Second tile is top-left ***CASE 1***
+			else if (x1 > x2 && y1 > y2) {	// Second tile is top-left
 				if (board [x1 - 1, y1] == 0 && checkPath (x1, y1, x2, y2, 7))	// Try starting from the left
 					return true;
 				else if (board [x1, y1 - 1] == 0 && checkPath (x1, y1, x2, y2, 8))	// Try starting from the top
@@ -171,6 +171,18 @@ namespace ShisenSho
 					return true;
 				else
 					return false;					
+			}
+			else if (x1 > x2 && y1 < y2) {	// Second tile is bottom-left
+				if (board [x1 - 1, y1] == 0 && checkPath (x1, y1, x2, y2, 9))	// Try starting from the left
+					return true;
+				/*else if (board [x1, y1 - 1] == 0 && checkPath (x1, y1, x2, y2, 8))	// Try starting from the top
+					return true;
+				else if (board [x1 + 1, y1] == 0 && checkPath (x1, y1, x2, y2, 4))	// Try starting from the right
+					return true;
+				else if (board [x1, y1 + 1] == 0 && checkPath (x1, y1, x2, y2, 6))	// Try starting from the bottom
+					return true;*/
+				else
+					return false;
 			}
 			else	// Specified for the compiler; end of al the cases
 				return false;
@@ -263,7 +275,7 @@ namespace ShisenSho
 				}
 				else 
 					return false;
-			case 7:	// First tile bottom-left; all paths starting from left
+			case 7:	// First tile bottom-right; all paths starting from left
 				// First try the shortest paths
 				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
 					;
@@ -299,7 +311,7 @@ namespace ShisenSho
 					} while (j != y2 && i >= 0 && board [i, y1] == 0);
 					if (j != y2)
 						return false;
-					else {	// Go right (final step)
+					else {	// Go left (final step)
 						for ( ; (i != x2 && board [i, j] == 0 && i >= 0); i--)
 							;
 						if (i == x2)
@@ -308,9 +320,9 @@ namespace ShisenSho
 							return false;
 					}
 				}
-			case 8:	// First tile bottom-left; all paths starting from the top
+			case 8:	// First tile bottom-right; all paths starting from the top
 				// First try the shortest paths
-				for (j = y1; (j != y2 && board [x1, y1 - 1] == 0 && j >= 0); j--)	// Go up
+				for (j = y1; (j != y2 && board [x1, j - 1] == 0 && j >= 0); j--)	// Go up
 					;
 				if (j == y2) {	// Try going left
 					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
@@ -318,7 +330,7 @@ namespace ShisenSho
 					if (i == x2)
 						return true;
 					else {	// Try up-left-down
-						j = y1 - 1;
+						j = j - 1;
 						do {	// Then go left
 							for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
 								;
@@ -354,6 +366,52 @@ namespace ShisenSho
 							return false;
 					}
 				}
+			case 9:	// First tile top-right; all paths starting from the left
+				// First try the shortest paths
+				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
+					;
+				if (i == x2) {	// Try going down
+					for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+						;
+					if (j == y2)
+						return true;
+					else {	// Try left-down-right
+						i = i - 1;	// Go left
+						do {	// Then go down
+							for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+								;
+							i--;	// Go left until you can go down
+						} while (j != y2 && j <= this.height + 1 && board [i, y1] == 0);
+						if (j == y2) {	// Go right (last turn)
+							for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
+								;
+							if (i == x2)
+								return true;
+							else
+								return false;
+						}
+						else 
+							return false;
+					}	// End left-down-right
+				}	// End if (i == x2)
+				else {
+					i = x1 - 1;	// Go left
+					do {	// Then go down
+						for (j = y1; (j != y2 && board [i, j + 1] == 0 && j <= this.height + 1); j++)
+							;
+						i--;
+					} while (j != y2 && i >= 0 && board [i, y1] == 0);
+					if (j != y2)
+						return false;
+					else {	// Go left (final step)
+						for ( ; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+							;
+						if (i == x2)
+							return true;
+						else
+							return false;
+					}
+				}		
 			default:
 				// To be implemented
 				return true;
