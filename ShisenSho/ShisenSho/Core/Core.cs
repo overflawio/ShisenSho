@@ -210,7 +210,7 @@ namespace ShisenSho
 			case 3:	// Tiles on the same column, 2 turns, start by going left
 				i = x1 - 1;
 				do {	// Then go up
-					for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+					for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
 						;
 					i--;
 				} while (j != y2 && i >= 0 && board [i, y1] == 0);
@@ -227,7 +227,7 @@ namespace ShisenSho
 			case 4:	// Tiles on the same column, 2 turns, start by going right
 				i = x1 + 1;
 				do {	// Then go up
-					for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+					for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
 						;
 					i++;
 				} while (j != y2 && i <= this.width + 1 && board [i, y1] == 0);
@@ -244,7 +244,7 @@ namespace ShisenSho
 			case 5:	// Tiles on the same row, start by going up
 				j = y1 - 1;
 				do {	// Then go left
-					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
 						;
 					j--;
 				} while (i != x2 && j >= 0 && board [x1, j] == 0);
@@ -261,7 +261,7 @@ namespace ShisenSho
 			case 6:
 				j = y1 + 1;
 				do {	// Then go left
-					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
 						;
 					j++;
 				} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
