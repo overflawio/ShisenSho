@@ -84,8 +84,6 @@ namespace ShisenSho
 
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
-			Console.WriteLine (x1 + " " + y1 + " " + x2 + " " + y2);
-
 			if (x1 < x2 || (x1 == x2 && y1 < y2))
 			{
 				int temp = x1;
@@ -284,7 +282,7 @@ namespace ShisenSho
 						;
 					if (j == y2)
 						return true;
-					else {	// Try left-up-right
+					else if (board [x2 - 1, y2] == 0) {	// Try left-up-right
 						i = i - 1;
 						do {	// Then go up
 							for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
@@ -296,30 +294,15 @@ namespace ShisenSho
 								;
 							if (i == x2)
 								return true;	// End of case three (left-up-right)
-							else
-								return false;
-						} else
-							return false;
-					} // End left-up-right
+							else	// Try left-up-left
+								return leftUpLeft (x1, y1, x2, y2);
+						} else 
+							return leftUpLeft (x1, y1, x2, y2);
+					} else 
+						return leftUpLeft (x1, y1, x2, y2);
 				} // End if (i == x2)
-				else {
-					i = x1 - 1;	// Go left
-					do {	// Then go up
-						for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
-							;
-						i--;
-					} while (j != y2 && i >= 0 && board [i, y1] == 0);
-					if (j != y2)
-						return false;
-					else {	// Go left (final step)
-						for ( ; (i != x2 && board [i, j] == 0 && i >= 0); i--)
-							;
-						if (i == x2)
-							return true;
-						else
-							return false;
-					}
-				}
+				else
+					return leftUpLeft (x1, y1, x2, y2);
 			case 8:	// First tile bottom-right; all paths starting from the top
 				// First try the shortest paths
 				for (j = y1; (j != y2 && board [x1, j - 1] == 0 && j >= 0); j--)	// Go up
@@ -342,30 +325,13 @@ namespace ShisenSho
 							if (j == y2)
 								return true;	// End of case three (up-left-down)
 							else
-								return false;
-						}
-						else 
-							return false;
+								return upLeftUp (x1, y1, x2, y2);
+						} else
+							return upLeftUp (x1, y1, x2, y2);
 					} // End up-left-down
 				} // End if (j == y2)
-				else {
-					j = y1 - 1;	// Go up
-					do {	// Then go left
-						for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
-							;
-						j--;
-					} while (i != x2 && j >= 0 && board [x1, j] == 0);
-					if (i != x2)
-						return false;
-					else {	// Go up (final step)
-						for ( ; (j != y2 && board [i, j] == 0 && j >= 0); j--)
-							;
-						if (j == y2)
-							return true;
-						else
-							return false;
-					}
-				}
+				else
+					return upLeftUp (x1, y1, x2, y2);
 			case 9:	// First tile top-right; all paths starting from the left
 				// First try the shortest paths
 				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
@@ -388,30 +354,13 @@ namespace ShisenSho
 							if (i == x2)
 								return true;
 							else
-								return false;
-						}
-						else 
-							return false;
+								return leftDownLeft (x1, y1, x2, y2);
+						} else
+							return leftDownLeft (x1, y1, x2, y2);
 					}	// End left-down-right
 				}	// End if (i == x2)
-				else {
-					i = x1 - 1;	// Go left
-					do {	// Then go down
-						for (j = y1; (j != y2 && board [i, j + 1] == 0 && j <= this.height + 1); j++)
-							;
-						i--;
-					} while (j != y2 && i >= 0 && board [i, y1] == 0);
-					if (j != y2)
-						return false;
-					else {	// Go left (final step)
-						for ( ; (i != x2 && board [i, j] == 0 && i >= 0); i--)
-							;
-						if (i == x2)
-							return true;
-						else
-							return false;
-					}
-				}
+				else
+					return leftDownLeft (x1, y1, x2, y2);
 			case 10:	// First tile top-right; all paths starting from the bottom
 				// First try the shortest paths
 				for (j = y1; (j != y2 && board [x1, j + 1] == 0 && j <= this.height + 1); j++)	// Go down
@@ -434,29 +383,13 @@ namespace ShisenSho
 							if (j == y2)
 								return true;	// End of case three (down-left-up)
 							else
-								return false;
+								return downLeftDown (x1, y1, x2, y2);
 						} else
-							return false;
+							return downLeftDown (x1, y1, x2, y2);
 					}	// End down-left-up
 				}	// End if (j == y2)
-				else {
-					j = y1 + 1;	// Go down
-					do {	// Then go left
-						for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
-							;
-						j++;
-					} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
-					if (i != x2)
-						return false;
-					else {	// Go down (final step)
-						for (; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
-							;
-						if (j == y2)
-							return true;
-						else
-							return false;
-					}
-				}
+				else
+					return downLeftDown (x1, y1, x2, y2);
 			case 11:	// First tile top-right; path starting from the right
 				i = x1 + 1;
 				do {	// Then go down
@@ -477,6 +410,94 @@ namespace ShisenSho
 			default:
 				// To be implemented
 				return true;
+			}
+		}
+
+		private bool leftUpLeft (int x1, int y1, int x2, int y2)	// Checks a left-up-left path
+		{
+			int i, j;
+
+			i = x1 - 1;	// Go left
+			do {	// Then go up
+				for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
+					;
+				i--;
+			} while (j != y2 && i >= 0 && board [i, y1] == 0);
+			if (j != y2)
+				return false;
+			else {	// Go left (final step)
+				for (; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					;
+				if (i == x2)
+					return true;
+				else
+					return false;
+			}
+		}
+
+		private bool upLeftUp (int x1, int y1, int x2, int y2)	// Checks an up-left-up path
+		{
+			int i, j;
+
+			j = y1 - 1;	// Go up
+			do {	// Then go left
+				for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+					;
+				j--;
+			} while (i != x2 && j >= 0 && board [x1, j] == 0);
+			if (i != x2)
+				return false;
+			else {	// Go up (final step)
+				for ( ; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+					;
+				if (j == y2)
+					return true;
+				else
+					return false;
+			}
+		}
+
+		private bool leftDownLeft (int x1, int y1, int x2, int y2)	// Checks a left-down-left path
+		{
+			int i, j;
+
+			i = x1 - 1;	// Go left
+			do {	// Then go down
+				for (j = y1; (j != y2 && board [i, j + 1] == 0 && j <= this.height + 1); j++)
+					;
+				i--;
+			} while (j != y2 && i >= 0 && board [i, y1] == 0);
+			if (j != y2)
+				return false;
+			else {	// Go left (final step)
+				for (; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					;
+				if (i == x2)
+					return true;
+				else
+					return false;
+			}
+		}
+
+		private bool downLeftDown (int x1, int y1, int x2, int y2)	// Checks a down-left-down path
+		{
+			int i, j;
+
+			j = y1 + 1;	// Go down
+			do {	// Then go left
+				for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+					;
+				j++;
+			} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
+			if (i != x2)
+				return false;
+			else {	// Go down (final step)
+				for (; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+					;
+				if (j == y2)
+					return true;
+				else
+					return false;
 			}
 		}
 	}
