@@ -193,14 +193,14 @@ namespace ShisenSho
 			int i, j;
 
 			switch (example) {
-			case 1:	// Tiles on the same column, 0 turns
+			case 1:	// Tiles on the same column, 0 turns, go up
 				for (j = y1 - 1; (j != y2 && board [x1, j] == 0 && j >= 0); j--)
 					;
 				if (j != y2)	// Case one
 					return false;
 				else
 					return true;
-			case 2:	// Tiles on the same row, 0 turns
+			case 2:	// Tiles on the same row, 0 turns, go left
 				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)
 					;
 				if (i != x2)	// Case one
