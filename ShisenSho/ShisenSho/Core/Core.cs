@@ -312,7 +312,7 @@ namespace ShisenSho
 						;
 					if (i == x2)
 						return true;
-					else {	// Try up-left-down
+					else if (board [x2, y2 - 1] == 0) {	// Try up-left-down
 						j = j - 1;
 						do {	// Then go left
 							for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
@@ -329,6 +329,8 @@ namespace ShisenSho
 						} else
 							return upLeftUp (x1, y1, x2, y2);
 					} // End up-left-down
+					else
+						return upLeftUp (x1, y1, x2, y2);
 				} // End if (j == y2)
 				else
 					return upLeftUp (x1, y1, x2, y2);
@@ -341,7 +343,7 @@ namespace ShisenSho
 						;
 					if (j == y2)
 						return true;
-					else {	// Try left-down-right
+					else if (board [x2 - 1, y2] == 0) {	// Try left-down-right
 						i = i - 1;	// Go left
 						do {	// Then go down
 							for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
@@ -358,6 +360,8 @@ namespace ShisenSho
 						} else
 							return leftDownLeft (x1, y1, x2, y2);
 					}	// End left-down-right
+					else 
+						return leftDownLeft (x1, y1, x2, y2);
 				}	// End if (i == x2)
 				else
 					return leftDownLeft (x1, y1, x2, y2);
@@ -370,7 +374,7 @@ namespace ShisenSho
 						;
 					if (i == x2)
 						return true;
-					else {	// Try down-left-up
+					else if (board [x2, y2 + 1] == 0) {	// Try down-left-up
 						j = j + 1;	// Go down
 						do {	// Then go left
 							for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
@@ -387,6 +391,8 @@ namespace ShisenSho
 						} else
 							return downLeftDown (x1, y1, x2, y2);
 					}	// End down-left-up
+					else
+						return downLeftDown (x1, y1, x2, y2);
 				}	// End if (j == y2)
 				else
 					return downLeftDown (x1, y1, x2, y2);
@@ -417,88 +423,96 @@ namespace ShisenSho
 		{
 			int i, j;
 
-			i = x1 - 1;	// Go left
-			do {	// Then go up
-				for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
-					;
-				i--;
-			} while (j != y2 && i >= 0 && board [i, y1] == 0);
-			if (j != y2)
-				return false;
-			else {	// Go left (final step)
-				for (; (i != x2 && board [i, j] == 0 && i >= 0); i--)
-					;
-				if (i == x2)
+			if (board [x2 + 1, y2] == 0 && x1 - x2 > 1) {
+				do {
+					i = x1 - 1;	// Go left
+					do {	// Then go up
+						for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
+							;
+						i--;
+					} while (j != y2 && i >= 0 && board [i, y1] == 0);
+					// Go left (final step)
+					for (; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+						;
+				} while (i != x2 && j != y2 && i > x2);
+				if (i == x2 && j == y2)
 					return true;
 				else
 					return false;
-			}
+			} else
+				return false;
 		}
 
 		private bool upLeftUp (int x1, int y1, int x2, int y2)	// Checks an up-left-up path
 		{
 			int i, j;
 
-			j = y1 - 1;	// Go up
-			do {	// Then go left
-				for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
-					;
-				j--;
-			} while (i != x2 && j >= 0 && board [x1, j] == 0);
-			if (i != x2)
-				return false;
-			else {	// Go up (final step)
-				for ( ; (j != y2 && board [i, j] == 0 && j >= 0); j--)
-					;
-				if (j == y2)
+			if (board [x2, y2 + 1] == 0 && y1 - y2 > 1) {
+				do {
+					j = y1 - 1;	// Go up
+					do {	// Then go left
+						for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+							;
+						j--;
+					} while (i != x2 && j >= 0 && board [x1, j] == 0);
+					// Go up (final step)
+					for (; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+						;
+				} while (i != x2 && j != y2 && j > y2);
+				if (i == x2 && j == y2)
 					return true;
 				else
 					return false;
-			}
+			} else
+				return false;
 		}
 
 		private bool leftDownLeft (int x1, int y1, int x2, int y2)	// Checks a left-down-left path
 		{
 			int i, j;
 
-			i = x1 - 1;	// Go left
-			do {	// Then go down
-				for (j = y1; (j != y2 && board [i, j + 1] == 0 && j <= this.height + 1); j++)
-					;
-				i--;
-			} while (j != y2 && i >= 0 && board [i, y1] == 0);
-			if (j != y2)
-				return false;
-			else {	// Go left (final step)
-				for (; (i != x2 && board [i, j] == 0 && i >= 0); i--)
-					;
-				if (i == x2)
+			if (board [x2 + 1, y2] == 0 && x1 - x2 > 1) {
+				do {
+					i = x1 - 1;	// Go left
+					do {	// Then go down
+						for (j = y1; (j != y2 && board [i, j + 1] == 0 && j <= this.height + 1); j++)
+							;
+						i--;
+					} while (j != y2 && i >= 0 && board [i, y1] == 0);
+					// Go left (final step)
+					for (; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+						;
+				} while (i != x2 && j != y2 && i > x2);
+				if (i == x2 && j == y2)
 					return true;
 				else
 					return false;
-			}
+			} else
+				return false;
 		}
 
 		private bool downLeftDown (int x1, int y1, int x2, int y2)	// Checks a down-left-down path
 		{
 			int i, j;
 
-			j = y1 + 1;	// Go down
-			do {	// Then go left
-				for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
-					;
-				j++;
-			} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
-			if (i != x2)
-				return false;
-			else {	// Go down (final step)
-				for (; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
-					;
-				if (j == y2)
+			if (board [x2, y2 - 1] == 0 && y2 - y1 > 1) {
+				do {
+					j = y1 + 1;	// Go down
+					do {	// Then go left
+						for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+							;
+						j++;
+					} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
+					// Go down (final step)
+					for (; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+						;
+				} while (i != x2 && j != y2 && j < y2);
+				if (i == x2 && j == y2)
 					return true;
 				else
 					return false;
-			}
+			} else
+				return false;
 		}
 	}
 }
