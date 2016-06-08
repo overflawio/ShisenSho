@@ -376,11 +376,13 @@ namespace ShisenSho
 						return true;
 					else if (board [x2, y2 + 1] == 0) {	// Try down-left-up
 						j = j + 1;	// Go down
-						do {	// Then go left
-							for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
-								;
-							j++;	// Go down until you can't go left
-						} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
+						if (board [x1, j] == 0) {
+							do {	// Then go left
+								for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+									;
+								j++;	// Go down until you can't go left
+							} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
+						}
 						if (i == x2) {	// Go up (last turn)
 							for (j = j - 1; (j > y2 && board [i, j] == 0); j--)
 								;
