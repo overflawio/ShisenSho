@@ -284,11 +284,13 @@ namespace ShisenSho
 						return true;
 					else if (board [x2 - 1, y2] == 0) {	// Try left-up-right
 						i = i - 1;
-						do {	// Then go up
-							for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
-								;
-							i--;
-						} while (j != y2 && i >= 0 && board [i, y1] == 0);
+						if (board [i, y1] == 0) {
+							do {	// Then go up
+								for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+									;
+								i--;
+							} while (j != y2 && i >= 0 && board [i, y1] == 0);
+						}
 						if (j == y2) {	// Go right (last turn)
 							for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
 								;
@@ -314,11 +316,13 @@ namespace ShisenSho
 						return true;
 					else if (board [x2, y2 - 1] == 0) {	// Try up-left-down
 						j = j - 1;
-						do {	// Then go left
-							for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
-								;
-							j--;
-						} while (i != x2 && j >= 0 && board [x1, j] == 0);
+						if (board [x1, j] == 0) {
+							do {	// Then go left
+								for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+									;
+								j--;
+							} while (i != x2 && j >= 0 && board [x1, j] == 0);
+						}
 						if (i == x2) {	// Go down (last turn)
 							for (j = j + 1; (j < y2 && board [i, j] == 0); j++)
 								;
@@ -345,11 +349,13 @@ namespace ShisenSho
 						return true;
 					else if (board [x2 - 1, y2] == 0) {	// Try left-down-right
 						i = i - 1;	// Go left
-						do {	// Then go down
-							for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
-								;
-							i--;	// Go left until you can go down
-						} while (j != y2 && j <= this.height + 1 && board [i, y1] == 0);
+						if (board [i, y1] == 0) {
+							do {	// Then go down
+								for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+									;
+								i--;	// Go left until you can go down
+							} while (j != y2 && j <= this.height + 1 && board [i, y1] == 0);
+						}
 						if (j == y2) {	// Go right (last turn)
 							for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
 								;
