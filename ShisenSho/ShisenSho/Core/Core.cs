@@ -436,12 +436,12 @@ namespace ShisenSho
 				do {
 					k = x1 - 1;	// Go left
 					do {	// Then go up
-						for (j = y1; (j != y2 && board [k, j - 1] == 0 && j >= 0); j--)
+						for (j = y1; (j != y2 && board [k, j - 1] == 0 && j > 0); j--)
 							;
 						k--;
-					} while (j != y2 && k >= 0 && board [k, y1] == 0);
+					} while (j != y2 && k > 0 && board [k, y1] == 0);
 					// Go left (final step)
-					for (i = k; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					for (i = k; (i != x2 && board [i, j] == 0 && i > 0); i--)
 						;
 				} while (i != x2 && j != y2 && i > x2 && board [k, y1] == 0);
 				if (i == x2 && j == y2)
@@ -461,12 +461,12 @@ namespace ShisenSho
 				do {
 					k = y1 - 1;	// Go up
 					do {	// Then go left
-						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i >= 0); i--)
+						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
 							;
 						k--;
 					} while (i != x2 && k >= 0 && board [x1, k] == 0);
 					// Go up (final step)
-					for (j = k; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+					for (j = k; (j != y2 && board [i, j] == 0 && j > 0); j--)
 						;
 				} while (i != x2 && j != y2 && j > y2 && board [x1, k] == 0);
 				if (i == x2 && j == y2)
@@ -486,12 +486,12 @@ namespace ShisenSho
 				do {
 					k = x1 - 1;	// Go left
 					do {	// Then go down
-						for (j = y1; (j != y2 && board [k, j + 1] == 0 && j <= this.height + 1); j++)
+						for (j = y1; (j != y2 && board [k, j + 1] == 0 && j < this.height + 1); j++)
 							;
 						k--;
-					} while (j != y2 && k >= 0 && board [k, y1] == 0);
+					} while (j != y2 && k > 0 && board [k, y1] == 0);
 					// Go left (final step)
-					for (i = k; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+					for (i = k; (i != x2 && board [i, j] == 0 && i > 0); i--)
 						;
 				} while (i != x2 && j != y2 && i > x2 && board [k, y1] == 0);
 				if (i == x2 && j == y2)
@@ -511,12 +511,12 @@ namespace ShisenSho
 				do {
 					k = y1 + 1;	// Go down
 					do {	// Then go left
-						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i >= 0); i--)
+						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
 							;
 						k++;
-					} while (i != x2 && k <= this.height + 1 && board [x1, k] == 0);
+					} while (i != x2 && k < this.height + 1 && board [x1, k] == 0);
 					// Go down (final step)
-					for (j = k; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+					for (j = k; (j != y2 && board [i, j] == 0 && j < this.height + 1); j++)
 						;
 				} while (i != x2 && j != y2 && j < y2 && board [x1, k] == 0);
 				if (i == x2 && j == y2)
