@@ -433,8 +433,9 @@ namespace ShisenSho
 				j;		// Y axis
 
 			if (board [x2 + 1, y2] == 0) {
+				k = x1;	// Go left
 				do {
-					k = x1 - 1;	// Go left
+					k--;
 					do {	// Then go up
 						for (j = y1; (j != y2 && board [k, j - 1] == 0 && j > 0); j--)
 							;
@@ -443,7 +444,7 @@ namespace ShisenSho
 					// Go left (final step)
 					for (i = k; (i != x2 && board [i, j] == 0 && i > 0); i--)
 						;
-				} while (i != x2 && j != y2 && i > x2 && board [k, y1] == 0);
+				} while ((i != x2 || j != y2) && i > x2 && board [k, y1] == 0);
 				if (i == x2 && j == y2)
 					return true;
 				else
@@ -458,8 +459,9 @@ namespace ShisenSho
 				j, k;	// Y axis
 
 			if (board [x2, y2 + 1] == 0) {
+				k = y1;	// Go up
 				do {
-					k = y1 - 1;	// Go up
+					k--;
 					do {	// Then go left
 						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
 							;
@@ -468,7 +470,7 @@ namespace ShisenSho
 					// Go up (final step)
 					for (j = k; (j != y2 && board [i, j] == 0 && j > 0); j--)
 						;
-				} while (i != x2 && j != y2 && j > y2 && board [x1, k] == 0);
+				} while ((i != x2 || j != y2) && j > y2 && board [x1, k] == 0);
 				if (i == x2 && j == y2)
 					return true;
 				else
@@ -483,8 +485,9 @@ namespace ShisenSho
 				j;		// Y axis
 
 			if (board [x2 + 1, y2] == 0) {
+				k = x1;	// Go left
 				do {
-					k = x1 - 1;	// Go left
+					k--;
 					do {	// Then go down
 						for (j = y1; (j != y2 && board [k, j + 1] == 0 && j < this.height + 1); j++)
 							;
@@ -493,7 +496,7 @@ namespace ShisenSho
 					// Go left (final step)
 					for (i = k; (i != x2 && board [i, j] == 0 && i > 0); i--)
 						;
-				} while (i != x2 && j != y2 && i > x2 && board [k, y1] == 0);
+				} while ((i != x2 || j != y2) && k > x2 && board [k, y1] == 0);
 				if (i == x2 && j == y2)
 					return true;
 				else
@@ -508,8 +511,9 @@ namespace ShisenSho
 				j, k;	// Y axis
 
 			if (board [x2, y2 - 1] == 0) {
+				k = y1;	// Go down
 				do {
-					k = y1 + 1;	// Go down
+					k++;
 					do {	// Then go left
 						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
 							;
@@ -518,7 +522,7 @@ namespace ShisenSho
 					// Go down (final step)
 					for (j = k; (j != y2 && board [i, j] == 0 && j < this.height + 1); j++)
 						;
-				} while (i != x2 && j != y2 && j < y2 && board [x1, k] == 0);
+				} while ((i != x2 || j != y2) && j < y2 && board [x1, k] == 0);
 				if (i == x2 && j == y2)
 					return true;
 				else
