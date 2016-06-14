@@ -466,7 +466,7 @@ namespace ShisenSho
 						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
 							;
 						k--;
-					} while (i != x2 && k >= 0 && board [x1, k] == 0);
+					} while (i != x2 && k > 0 && board [x1, k] == 0);
 					// Go up (final step)
 					for (j = k; (j != y2 && board [i, j] == 0 && j > 0); j--)
 						;
