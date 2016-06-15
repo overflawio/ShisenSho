@@ -429,8 +429,7 @@ namespace ShisenSho
 				else 
 					return false;
 			default:
-				// To be implemented
-				return true;
+				return false;
 			}
 		}
 

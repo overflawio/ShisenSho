@@ -93,7 +93,7 @@ namespace ShisenSho
 		{
 			MessageDialog md = new MessageDialog(this, 
 				DialogFlags.DestroyWithParent, MessageType.Question, 
-				ButtonsType.YesNo, "Wanna play another game?");
+				ButtonsType.YesNo, "Do you want to play another game?");
 
 			md.Response += delegate (object o, ResponseArgs resp) {
 
