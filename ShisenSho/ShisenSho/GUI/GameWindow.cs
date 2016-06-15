@@ -76,6 +76,23 @@ namespace ShisenSho
 			table.update ();
 		}
 
+		public void NewGamePopup ()
+		{
+			MessageDialog md = new MessageDialog(this, 
+				DialogFlags.DestroyWithParent, MessageType.Question, 
+				ButtonsType.YesNo, "Wanna play another game?");
+
+			md.Response += delegate (object o, ResponseArgs resp) {
+
+				if (resp.ResponseId == ResponseType.No) {
+					Application.Quit ();
+				}
+			};
+
+			md.Run();
+			md.Destroy();
+		}
+
 		private MenuBar createMenu ()
 		{
 			MenuBar m = new MenuBar ();

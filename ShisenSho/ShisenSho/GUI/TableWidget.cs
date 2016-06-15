@@ -38,6 +38,7 @@ namespace ShisenSho
 			if (c.getBrickCount () == 0) {
 				Console.WriteLine ("You won, need to implement a popup");
 				gameWindow.NewGameActivated (null, null);	// WIP this is bad. just testing
+				gameWindow.NewGamePopup ();
 			}
 			else
 			{
