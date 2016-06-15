@@ -5,6 +5,7 @@
 <li><del>Implement a function that checks if the move is possible</del></li>
 <li>Detect gameover/win</li>
 <li>Implement undo</li>
+<li>Remove OP mode (all WIP comments)</li>
 </ul>
 
 Collaborators:
