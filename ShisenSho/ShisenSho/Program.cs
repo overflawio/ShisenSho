@@ -9,7 +9,7 @@ namespace ShisenSho
 		{
 			Application.Init ();
 
-			Core core = new Core (6,12,12);
+			Core core = new Core (6,12,18);
 
 			GameWindow win = new GameWindow (core);
 			win.Show ();

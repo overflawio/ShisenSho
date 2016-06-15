@@ -12,7 +12,7 @@ namespace ShisenSho
 		private int width;
 		private int brickNumber;	// Number of different type of bricks
 		private int [,] board;
-		private int brickCount;	// Number of bricks whit value != NO_BRICK_TYPE
+		private int brickCount;	// Number of bricks with value != NO_BRICK_TYPE
 		private Random rnd;
 
 		public Core (int height, int width, int brickNumber)
@@ -40,7 +40,11 @@ namespace ShisenSho
 			// Initializing the array
 			for (i = 0; i < brickNumber; i++)
 				numBrick [i] = (this.width * this.height) / brickNumber;	// Number of instances of the same brick
-
+			// Initializing the edges of the board
+			for (i = 0; i <= this.height + 1; i++)
+				board [0, i] = 0;
+			for (j = 0; j <= this.width + 1; j++)
+				board [j, 0] = 0;
 			// Placing bricks
 			for (i = 1; i <= this.height; i++)	// Rows
 				for (j = 1; j <= this.width; j++) {	// Column
@@ -80,7 +84,18 @@ namespace ShisenSho
 
 		public bool makeMove (int x1, int y1, int x2, int y2)
 		{
-			bool res = pathViability (x1,y1,x2,y2,Direction.none,0); // recursive call that checks if there is a path from a brick to another one
+			if (x1 < x2 || (x1 == x2 && y1 < y2))
+			{
+				int temp = x1;
+				x1 = x2;
+				x2 = temp;
+				temp = y1;
+				y1 = y2;
+				y2 = temp;
+			}
+
+			bool res = pathViability (x1, y1, x2, y2); // Checks if there is a path
+
 			if (res)
 			{
 				board [x1, y1] = board [x2, y2] = NO_BRICK_TYPE;
@@ -110,89 +125,410 @@ namespace ShisenSho
 					}
 		}	
 
-		private bool pathViability (int x1, int y1, int x2, int y2, Direction d, int turn_count)
+		private bool pathViability (int x1, int y1, int x2, int y2)
 		{
-			if (turn_count > 3)
+			if (board [x1, y1] != board [x2, y2])
 				return false;
-			int i;
+			/*** Checking all the cases ***/
+			else if (x1 == x2 && y1 > y2) {		// Selected tiles on the same column
+					if (checkPath (x1, y1, x2, y2, 1))
+						return true;
+					else {
+						if (board [x1 - 1, y1] == 0  	// Try starting from the left
+							&& checkPath (x1, y1, x2, y2, 3)) {
+								return true;
+						}
+						else if (board [x1 + 1, y1] == 0)	// Otherwise try from the right
+							return checkPath (x1, y1, x2, y2, 4);
+						else
+							return false;
+					}
+			}
+			else if (y1 == y2 && x1 > x2) {		// Selected tiles on the same row
+					if (checkPath (x1, y1, x2, y2, 2))
+						return true;
+					else {
+						if (board [x1, y1 - 1] == 0  	// Try starting from the top
+							&& checkPath (x1, y1, x2, y2, 5)) {
+							return true;
+						}
+						else if (board [x1, y1 + 1] == 0)	// Otherwise try from the bottom
+							return checkPath (x1, y1, x2, y2, 6);
+						else
+							return false;
+					}
+			}
+			else if (x1 > x2 && y1 > y2) {	// Second tile is top-left
+				if (board [x1 - 1, y1] == 0 && checkPath (x1, y1, x2, y2, 7))	// Try starting from the left
+					return true;
+				else if (board [x1, y1 - 1] == 0 && checkPath (x1, y1, x2, y2, 8))	// Try starting from the top
+					return true;
+				else if (board [x1 + 1, y1] == 0 && checkPath (x1, y1, x2, y2, 4))	// Try starting from the right
+					return true;
+				else if (board [x1, y1 + 1] == 0 && checkPath (x1, y1, x2, y2, 6))	// Try starting from the bottom
+					return true;
+				else
+					return false;					
+			}
+			else if (x1 > x2 && y1 < y2) {	// Second tile is bottom-left
+				if (board [x1 - 1, y1] == 0 && checkPath (x1, y1, x2, y2, 9))	// Try starting from the left
+					return true;
+				else if (board [x1, y1 - 1] == 0 && checkPath (x1, y1, x2, y2, 5))	// Try starting from the top
+					return true;
+				else if (board [x1 + 1, y1] == 0 && checkPath (x1, y1, x2, y2, 11))	// Try starting from the right
+					return true;
+				else if (board [x1, y1 + 1] == 0 && checkPath (x1, y1, x2, y2, 10))	// Try starting from the bottom
+					return true;
+				else
+					return false;
+			}
+			else	// Specified for the compiler; end of al the cases
+				return false;
+		}
+			
+		private bool checkPath (int x1, int y1, int x2, int y2, int example)
+		{
+			int i, j;
 
-			if (board [x1, y1] == board [x2, y2]) {
-
+			switch (example) {
+			case 1:	// Tiles on the same column, 0 turns, go up
+				for (j = y1 - 1; (j != y2 && board [x1, j] == 0 && j >= 0); j--)
+					;
+				if (j != y2)	// Case one
+					return false;
+				else
+					return true;
+			case 2:	// Tiles on the same row, 0 turns, go left
+				for (i = x1 - 1; (i != x2 && board [i, y1] == 0 && i >= 0); i--)
+					;
+				if (i != x2)	// Case one
+					return false;
+				else
+					return true;
+			case 3:	// Tiles on the same column, 2 turns, start by going left
+				i = x1 - 1;
+				do {	// Then go up
+					for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
+						;
+					i--;
+				} while (j != y2 && i >= 0 && board [i, y1] == 0);
+				if (j == y2) {	// Go right (last turn)
+					for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
+						;
+					if (i == x2)
+						return true;	// End of case three (left-up-right)
+					else
+						return false;
+				}
+				else 
+					return false;
+			case 4:	// Tiles on the same column, 2 turns, start by going right
+				i = x1 + 1;
+				do {	// Then go up
+					for (j = y1; (j != y2 && board [i, j - 1] == 0 && j >= 0); j--)
+						;
+					i++;
+				} while (j != y2 && i <= this.width + 1 && board [i, y1] == 0);
+				if (j == y2) {	// Go left (last turn)
+					for (i = i - 1; (i > x2 && board [i, j] == 0); i--)
+						;
+					if (i == x2)
+						return true;	// End of case four (right-up-left)
+					else
+						return false;
+				}
+				else 
+					return false;
+			case 5:	// Tiles on the same row, start by going up
+				j = y1 - 1;
+				do {	// Then go left
+					for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+						;
+					j--;
+				} while (i != x2 && j >= 0 && board [x1, j] == 0);
+				if (i == x2) {	// Go down (last turn)
+					for (j = j + 1; (j < y2 && board [i, j] == 0); j++)
+						;
+					if (j == y2)
+						return true;	// End of case three (up-left-down)
+					else
+						return false;
+				}
+				else 
+					return false;
+			case 6:
+				j = y1 + 1;
+				do {	// Then go left
+					for (i = x1; (i != x2 && board [i - 1, j] == 0 && i >= 0); i--)
+						;
+					j++;
+				} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
+				if (i == x2) {	// Go up (last turn)
+					for (j = j - 1; (j > y2 && board [i, j] == 0); j--)
+						;
+					if (j == y2)
+						return true;	// End of case three (down-left-up)
+					else
+						return false;
+				}
+				else 
+					return false;
+			case 7:	// First tile bottom-right; all paths starting from left
+				// First try the shortest paths
+				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
+					;
+				if (i == x2) {	// Try going up
+					for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+						;
+					if (j == y2)
+						return true;
+					else if (board [x2 - 1, y2] == 0) {	// Try left-up-right
+						i = i - 1;
+						if (board [i, y1] == 0) {
+							do {	// Then go up
+								for (j = y1 - 1; (j != y2 && board [i, j] == 0 && j >= 0); j--)
+									;
+								i--;
+							} while (j != y2 && i >= 0 && board [i, y1] == 0);
+						}
+						if (j == y2) {	// Go right (last turn)
+							for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
+								;
+							if (i == x2)
+								return true;	// End of case three (left-up-right)
+							else	// Try left-up-left
+								return leftUpLeft (x1, y1, x2, y2);
+						} else 
+							return leftUpLeft (x1, y1, x2, y2);
+					} else 
+						return leftUpLeft (x1, y1, x2, y2);
+				} // End if (i == x2)
+				else
+					return leftUpLeft (x1, y1, x2, y2);
+			case 8:	// First tile bottom-right; all paths starting from the top
+				// First try the shortest paths
+				for (j = y1; (j != y2 && board [x1, j - 1] == 0 && j >= 0); j--)	// Go up
+					;
+				if (j == y2) {	// Try going left
+					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+						;
+					if (i == x2)
+						return true;
+					else if (board [x2, y2 - 1] == 0) {	// Try up-left-down
+						j = j - 1;
+						if (board [x1, j] == 0) {
+							do {	// Then go left
+								for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+									;
+								j--;
+							} while (i != x2 && j >= 0 && board [x1, j] == 0);
+						}
+						if (i == x2) {	// Go down (last turn)
+							for (j = j + 1; (j < y2 && board [i, j] == 0); j++)
+								;
+							if (j == y2)
+								return true;	// End of case three (up-left-down)
+							else
+								return upLeftUp (x1, y1, x2, y2);
+						} else
+							return upLeftUp (x1, y1, x2, y2);
+					} // End up-left-down
+					else
+						return upLeftUp (x1, y1, x2, y2);
+				} // End if (j == y2)
+				else
+					return upLeftUp (x1, y1, x2, y2);
+			case 9:	// First tile top-right; all paths starting from the left
+				// First try the shortest paths
+				for (i = x1; (i != x2 && board [i - 1, y1] == 0 && i >= 0); i--)	// Go left
+					;
+				if (i == x2) {	// Try going down
+					for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+						;
+					if (j == y2)
+						return true;
+					else if (board [x2 - 1, y2] == 0) {	// Try left-down-right
+						i = i - 1;	// Go left
+						if (board [i, y1] == 0) {
+							do {	// Then go down
+								for (j = y1 + 1; (j != y2 && board [i, j] == 0 && j <= this.height + 1); j++)
+									;
+								i--;	// Go left until you can go down
+							} while (j != y2 && j <= this.height + 1 && board [i, y1] == 0);
+						}
+						if (j == y2) {	// Go right (last turn)
+							for (i = i + 1; (i < x2 && board [i, j] == 0); i++)
+								;
+							if (i == x2)
+								return true;
+							else
+								return leftDownLeft (x1, y1, x2, y2);
+						} else
+							return leftDownLeft (x1, y1, x2, y2);
+					}	// End left-down-right
+					else 
+						return leftDownLeft (x1, y1, x2, y2);
+				}	// End if (i == x2)
+				else
+					return leftDownLeft (x1, y1, x2, y2);
+			case 10:	// First tile top-right; all paths starting from the bottom
+				// First try the shortest paths
+				for (j = y1; (j != y2 && board [x1, j + 1] == 0 && j <= this.height + 1); j++)	// Go down
+					;
+				if (j == y2) {	// Try going left
+					for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+						;
+					if (i == x2)
+						return true;
+					else if (board [x2, y2 + 1] == 0) {	// Try down-left-up
+						j = j + 1;	// Go down
+						if (board [x1, j] == 0) {
+							do {	// Then go left
+								for (i = x1 - 1; (i != x2 && board [i, j] == 0 && i >= 0); i--)
+									;
+								j++;	// Go down until you can't go left
+							} while (i != x2 && j <= this.height + 1 && board [x1, j] == 0);
+						}
+						if (i == x2) {	// Go up (last turn)
+							for (j = j - 1; (j > y2 && board [i, j] == 0); j--)
+								;
+							if (j == y2)
+								return true;	// End of case three (down-left-up)
+							else
+								return downLeftDown (x1, y1, x2, y2);
+						} else
+							return downLeftDown (x1, y1, x2, y2);
+					}	// End down-left-up
+					else
+						return downLeftDown (x1, y1, x2, y2);
+				}	// End if (j == y2)
+				else
+					return downLeftDown (x1, y1, x2, y2);
+			case 11:	// First tile top-right; path starting from the right
+				i = x1 + 1;
+				do {	// Then go down
+					for (j = y1; (j != y2 && board [i, j + 1] == 0 && j <= this.height + 1); j++)
+						;
+					i++;
+				} while (j != y2 && i <= this.width + 1 && board [i, y1] == 0);
+				if (j == y2) {	// Go left (last turn)
+					for (i = i - 1; (i > x2 && board [i, j] == 0); i--)
+						;
+					if (i == x2)
+						return true;	// End of case right-down-left
+					else
+						return false;
+				}
+				else 
+					return false;
+			default:
+				// To be implemented
 				return true;
 			}
-			return false;
+		}
 
-			if (d == Direction.none) {
-				/*
-				Console.WriteLine ("Searching the next direction to explore");
-				Console.WriteLine ("Recursion with new direction");
-				*/
-				if (!pathViability (x1, y1, x2, y2, Direction.up, turn_count + 1))
-				if (!pathViability (x1, y1, x2, y2, Direction.right, turn_count + 1))
-				if (!pathViability (x1, y1, x2, y2, Direction.left, turn_count + 1))
-				if (!pathViability (x1, y1, x2, y2, Direction.down, turn_count + 1))
+		private bool leftUpLeft (int x1, int y1, int x2, int y2)	// Checks a left-up-left path
+		{
+			int i, k,	// X axis
+				j;		// Y axis
+
+			if (board [x2 + 1, y2] == 0) {
+				k = x1;	// Go left
+				do {
+					k--;
+					do {	// Then go up
+						for (j = y1; (j != y2 && board [k, j - 1] == 0 && j > 0); j--)
+							;
+						k--;
+					} while (j != y2 && k > 0 && board [k, y1] == 0);
+					// Go left (final step)
+					for (i = k; (i != x2 && board [i, j] == 0 && i > 0); i--)
+						;
+				} while ((i != x2 || j != y2) && i > x2 && board [k, y1] == 0);
+				if (i == x2 && j == y2)
+					return true;
+				else
 					return false;
-							else return true;
-						else return true;
-					else return true;
-				else return true;
-					
-			} else {
-				switch (d) {
-				case Direction.up:
-				// First check if the second tile is in the same column of the first one
-					if (y1 == y2) {
-						// Check if the second tile is next to the first one
-						if (x2 == x1 - 1)
-							return true;
-						else
-							for (i = x1 - 1; (board [i, y1] == 0 && i > 0); i--)
-								if (board [i, y1] == board [x1, y1])	// To be handled within the GUI
-							return true;
-					} else
-						return false;
-					break;
-				case Direction.down:
-					// First check if the second tile is in the same column of the first one
-					if (y1 == y2) {
-						// Check if the second tile is next to the first one
-						if (x2 == x1 + 1)
-							return true;
-						else
-							for (i = x1 + 1; (board [i, y1] == 0 || i < this.height + 1); i++)
-								if (board [i, y1] == board [x1, y1])	// To be handled within the GUI
-									return true;
-					} else
-						return false;
-					break;
-				case Direction.left:
-					// First check if the second tile is in the same row of the first one
-					if (x1 == x2) {
-						// Check if the second tile is next to the first one
-						if (y2 == y1 - 1)
-							return true;
-						else
-							for (i = y1 - 1; (board [x1, i] == 0 || i > 0); i--)
-								if (board [x1, i] == board [x1, y1])	// To be handled within the GUI
-									return true;
-					} else
-						return false;
-					break;
-				case Direction.right:
-					// First check if the second tile is in the same row of the first one
-					if (x1 == x2) {
-						// Check if the second tile is next to the first one
-						if (y2 == y1 + 1)
-							return true;
-						else
-							for (i = y1 + 1; (board [x1, i] == 0 || i < this.width + 1); i++)
-								if (board [x1, i] == board [x1, y1])	// To be handled within the GUI
-									return true;
-					} else
-						return false;
-					break;
-				}
-			}
+			} else
+				return false;
+		}
+
+		private bool upLeftUp (int x1, int y1, int x2, int y2)	// Checks an up-left-up path
+		{
+			int i,		// X axis
+				j, k;	// Y axis
+
+			if (board [x2, y2 + 1] == 0) {
+				k = y1;	// Go up
+				do {
+					k--;
+					do {	// Then go left
+						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
+							;
+						k--;
+					} while (i != x2 && k > 0 && board [x1, k] == 0);
+					// Go up (final step)
+					for (j = k; (j != y2 && board [i, j] == 0 && j > 0); j--)
+						;
+				} while ((i != x2 || j != y2) && j > y2 && board [x1, k] == 0);
+				if (i == x2 && j == y2)
+					return true;
+				else
+					return false;
+			} else
+				return false;
+		}
+
+		private bool leftDownLeft (int x1, int y1, int x2, int y2)	// Checks a left-down-left path
+		{
+			int i, k,	// X axis
+				j;		// Y axis
+
+			if (board [x2 + 1, y2] == 0) {
+				k = x1;	// Go left
+				do {
+					k--;
+					do {	// Then go down
+						for (j = y1; (j != y2 && board [k, j + 1] == 0 && j < this.height + 1); j++)
+							;
+						k--;
+					} while (j != y2 && k > 0 && board [k, y1] == 0);
+					// Go left (final step)
+					for (i = k; (i != x2 && board [i, j] == 0 && i > 0); i--)
+						;
+				} while ((i != x2 || j != y2) && k > x2 && board [k, y1] == 0);
+				if (i == x2 && j == y2)
+					return true;
+				else
+					return false;
+			} else
+				return false;
+		}
+
+		private bool downLeftDown (int x1, int y1, int x2, int y2)	// Checks a down-left-down path
+		{
+			int i,		// X axis
+				j, k;	// Y axis
+
+			if (board [x2, y2 - 1] == 0) {
+				k = y1;	// Go down
+				do {
+					k++;
+					do {	// Then go left
+						for (i = x1; (i != x2 && board [i - 1, k] == 0 && i > 0); i--)
+							;
+						k++;
+					} while (i != x2 && k < this.height + 1 && board [x1, k] == 0);
+					// Go down (final step)
+					for (j = k; (j != y2 && board [i, j] == 0 && j < this.height + 1); j++)
+						;
+				} while ((i != x2 || j != y2) && j < y2 && board [x1, k] == 0);
+				if (i == x2 && j == y2)
+					return true;
+				else
+					return false;
+			} else
+				return false;
 		}
 	}
 }
