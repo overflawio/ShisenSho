@@ -70,6 +70,19 @@ namespace ShisenSho
 			table.update ();
 		}
 
+		/* WIP REMOVE */
+		private void OnOP (object sender, EventArgs args)
+		{
+			if (c.OP) {
+				c.OP = false;
+				Console.WriteLine ("OP turned off");
+			}
+			else {
+				c.OP = true;
+				Console.WriteLine ("OP turned on");
+			}
+		}
+
 		public void NewGameActivated (object sender, EventArgs args)
 		{
 			c.newGame ();
@@ -111,6 +124,10 @@ namespace ShisenSho
 
 			item = new MenuItem("Scramble");
 			item.Activated += OnScrambleActivated;
+			menu.Append(item);
+			/* WIP has to be removed */
+			item = new MenuItem("OP mode");
+			item.Activated += OnOP;
 			menu.Append(item);
 
 			entry.Submenu = menu;

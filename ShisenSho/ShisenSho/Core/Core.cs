@@ -14,6 +14,7 @@ namespace ShisenSho
 		private int [,] board;
 		private int brickCount;	// Number of bricks with value != NO_BRICK_TYPE
 		private Random rnd;
+		/* WIP need to remove */ public bool OP = false;
 
 		public Core (int height, int width, int brickNumber)
 		{
@@ -95,6 +96,12 @@ namespace ShisenSho
 			}
 
 			bool res = pathViability (x1, y1, x2, y2); // Checks if there is a path
+
+			// WIP (will be removed)
+			if (OP) {
+				if (board [x1, y1] == board [x2, y2])
+					res = true;
+			}
 
 			if (res)
 			{
