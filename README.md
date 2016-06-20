@@ -4,8 +4,9 @@
 <li><del>Replace cross.svg with a black semi-transparent layer</del></li>
 <li><del>Implement a function that checks if the move is possible</del></li>
 <li>Detect gameover/win</li>
-<li>Implement undo</li>
+<li>Implement undo (only one move)</li>
 <li>Remove OP mode (all WIP comments)</li>
+<li>Licence information in menu entry</li>
 </ul>
 
 Collaborators:
