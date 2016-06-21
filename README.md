@@ -5,15 +5,13 @@
 <li><del>Implement a function that checks if the move is possible</del></li>
 <li>Detect gameover/win</li>
 <li>Implement undo (only one move)</li>
-<li>Remove OP mode (all WIP comments)</li>
-<li>Licence information in menu entry</li>
+<li><del>Remove OP mode (all WIP comments)</del></li>
+<li>License information in menu entry</li>
 </ul>
 
 Collaborators:
-- <a 
-href="https://github.com/MascioSpam">Flavio Mascetti</a>
+- <a href="https://github.com/MascioSpam">Flavio Mascetti</a>
 
-- <a href="https://github.com/DodoIta">Davide 
-Cortellucci</a>
+- <a href="https://github.com/DodoIta">Davide Cortellucci</a>
 
 Brick svgs downloaded from <a href="https://commons.wikimedia.org/wiki/User:Shizhao/Mahjong">Wikimedia Commons</a>
