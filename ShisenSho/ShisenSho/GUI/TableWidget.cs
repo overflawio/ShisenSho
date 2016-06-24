@@ -43,7 +43,6 @@ namespace ShisenSho
 			else
 			{
 				if (c.getBrickCount () == 4) {
-					Console.WriteLine ("Checking if game is over");
 					/*
 						In this implementation of ShisenSho (6 x 12 tiles with 12 tile types), if the tiles amout to four, they are positioned one
 						next to the other forming a square and with alternated types, we are in GameOver use case.
@@ -51,10 +50,10 @@ namespace ShisenSho
 						Here is an example of "no more move possible" tile disposition 12
 																					   21
 					*/
-					int x = 1;
-					int y = 1;
-					while (x < c.getBoardWidth () + 2){
-						while (y < c.getBoardHeight () + 2) {
+					Console.WriteLine ("Checking if game is over");
+
+					for (int x = 1; x < c.getBoardWidth () + 2; x++) {
+						for (int y = 1; y < c.getBoardHeight () + 2; y++) {
 							if (this.c.getBrickID (x, y) != Core.NO_BRICK_TYPE &&
 								this.c.getBrickID (x, y) == this.c.getBrickID (x + 1, y + 1) &&
 								this.c.getBrickID (x + 1, y) != Core.NO_BRICK_TYPE &&
@@ -65,11 +64,8 @@ namespace ShisenSho
 								gameWindow.NewGameActivated (null, null);
 								gameWindow.GameOverPopup ();
 							}
-							y++;
 						}
-						x++;
 					}
-					this.ShowAll ();
 				}
 				else
 					Console.WriteLine (c.getBrickCount ());
