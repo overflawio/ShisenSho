@@ -5,14 +5,14 @@ namespace ShisenSho
 {
 	public class GameWindow : Gtk.Window
 	{
-		Core c;
+		private Core c;
 		private TableWidget table;
-		VBox vContainer;			// Vertical container box
-		HBox hContainer;			// Horizontal container box
+		private VBox vContainer;			// Vertical container box
+		private HBox hContainer;			// Horizontal container box
 
-		MenuBar menuBar;
+		private MenuBar menuBar;
 
-		int scale;
+		private int scale;
 
 
 		public GameWindow (Core c) : base (Gtk.WindowType.Toplevel)
