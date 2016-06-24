@@ -93,6 +93,23 @@ namespace ShisenSho
 			md.Destroy();
 		}
 
+		public void GameOverPopup ()
+		{
+			MessageDialog md = new MessageDialog(this, 
+				DialogFlags.DestroyWithParent, MessageType.Question, 
+				ButtonsType.YesNo, "You lost! Do you want to play again?");
+
+			md.Response += delegate (object o, ResponseArgs resp) {
+
+				if (resp.ResponseId == ResponseType.No) {
+					Application.Quit ();
+				}
+			};
+
+			md.Run();
+			md.Destroy();
+		}
+
 		private MenuBar createMenu ()
 		{
 			MenuBar m = new MenuBar ();
